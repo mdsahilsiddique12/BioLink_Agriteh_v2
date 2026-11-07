@@ -1,5 +1,5 @@
 /* ============================================================
-   NEUMORPHIC GLASS NAVBAR — SLEEK & UNCLUTTERED
+   NEUMORPHIC GLASS NAVBAR — PERFECTLY CENTERED & BALANCED
    ============================================================ */
 
 .neu-navbar-wrapper {
@@ -8,7 +8,9 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 12px var(--space-md);
+  padding: 14px var(--space-md);
+  display: flex;
+  justify-content: center;
   transition: all 0.3s ease;
 }
 
@@ -23,12 +25,12 @@
   display: flex;
   align-items: center;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
   max-width: 1240px;
-  margin: 0 auto;
 }
 
 .neu-navbar--scrolled {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: var(--neu-shadow-lg);
   border-color: rgba(255, 255, 255, 0.95);
 }
@@ -42,7 +44,7 @@
   gap: var(--space-md);
 }
 
-/* ── Brand Area ── */
+/* ── Left Brand Area ── */
 .navbar__brand-area {
   display: flex;
   align-items: center;
@@ -56,8 +58,8 @@
 }
 
 .neu-logo-container {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #ffffff;
   box-shadow: var(--neu-shadow-sm);
@@ -83,7 +85,7 @@
 
 .navbar__brand-title {
   font-family: var(--font-display);
-  font-size: 1.22rem;
+  font-size: 1.25rem;
   font-weight: 900;
   color: var(--theme-primary);
   letter-spacing: -0.02em;
@@ -97,7 +99,7 @@
   letter-spacing: 0.08em;
 }
 
-/* ── Neumorphic Sector Trigger ── */
+/* ── Sector Trigger Pill ── */
 .neu-sector-dropdown-wrap {
   position: relative;
 }
@@ -136,7 +138,7 @@
   transform: rotate(180deg);
 }
 
-/* Popover list */
+/* Popover */
 .neu-sector-popover {
   position: absolute;
   top: calc(100% + 12px);
@@ -144,7 +146,7 @@
   width: 320px;
   padding: 10px;
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   border: 1px solid var(--glass-border);
   box-shadow: var(--neu-shadow-lg);
   z-index: 1100;
@@ -246,6 +248,12 @@
   color: var(--text-muted);
   border-radius: var(--radius-full);
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .neu-nav-item:hover {
@@ -257,6 +265,17 @@
   color: var(--theme-primary);
   background: #ffffff;
   box-shadow: var(--neu-shadow-sm);
+}
+
+.nav-coming-soon-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: #f59e0b;
+  color: #0f172a;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
 }
 
 /* ── Right Action Cluster ── */
@@ -281,7 +300,7 @@
 }
 
 .neu-nav-cta {
-  padding: 10px 20px;
+  padding: 10px 22px;
   font-size: 0.8rem;
   font-weight: 800;
   white-space: nowrap;
@@ -329,7 +348,7 @@
 .neu-mobile-drawer {
   display: none;
   position: fixed;
-  top: calc(var(--navbar-height) + 20px);
+  top: calc(var(--navbar-height) + 24px);
   left: var(--space-md);
   right: var(--space-md);
   z-index: 999;
@@ -342,7 +361,7 @@
 
 .mobile-drawer-inner {
   padding: var(--space-lg);
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: var(--radius-xl);
 }
 
@@ -388,8 +407,94 @@
   padding: 6px 0;
 }
 
+/* ── Lab Reports Policy Modal ── */
+.coa-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  animation: neuFadeIn 0.2s ease;
+}
+
+.coa-modal-card {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--glass-border);
+}
+
+.coa-modal-header {
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+.coa-icon-circle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--bg-inset);
+  box-shadow: var(--neu-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.coa-badge-coming-soon {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: #f59e0b;
+  color: #0f172a;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: 8px;
+}
+
+.coa-modal-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--theme-primary);
+}
+
+.coa-modal-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.coa-modal-trust-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  margin-bottom: var(--space-xl);
+}
+
+.coa-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 /* ── Responsive Queries ── */
-@media (max-width: 1040px) {
+@media (max-width: 1060px) {
   .navbar__nav-links {
     display: none;
   }

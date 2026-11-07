@@ -4,9 +4,10 @@ import {
   ArrowRight, Truck, Factory, Clock, Shield, Star, ChevronRight, 
   Leaf, Droplets, Beaker, Package, Zap, Globe, ExternalLink, 
   Handshake, Award, Sparkles, CheckCircle2, ChevronDown, Mountain, 
-  Sun, Layers, Droplet, Wheat, FileText, Check, ShieldCheck, Scale, MapPin
+  Sun, Layers, Droplet, Wheat, FileText, Check, ShieldCheck, Scale, MapPin, Lock
 } from 'lucide-react';
 import ParticleField from '../components/ParticleField';
+import FloatingObjects from '../components/FloatingObjects';
 import TonnageSlider from '../components/TonnageSlider';
 import ProductSpecCard from '../components/ProductSpecCard';
 import { useSubdomain } from '../context/SubdomainContext';
@@ -17,29 +18,10 @@ import { feedProducts } from '../data/feedProducts';
 import { seaBuckthornProducts } from '../data/seaBuckthornProducts';
 import './HomePage.css';
 
-const iconMap = { Truck, Factory, Clock, Shield };
-
-function NeuStatCard({ value, label, prefix = '', suffix = '', index }) {
-  const { containerRef, countRef } = useCountUp(value, 2000);
-
-  return (
-    <div className="neu-stat-tile neu-card" ref={containerRef} style={{ transitionDelay: `${index * 100}ms` }}>
-      <div className="neu-stat-val">
-        {prefix && <span>{prefix}</span>}
-        <span ref={countRef}>0</span>
-        {suffix && <span>{suffix}</span>}
-      </div>
-      <p className="neu-stat-label">{label}</p>
-    </div>
-  );
-}
-
 export default function HomePage() {
   const { tenant, switchTenant } = useSubdomain();
   const revealRef = useScrollReveal();
   const tickerRef = useRef(null);
-
-  const heroData = tenant.hero || {};
 
   // ════════════════════════════════════════════════════════════
   // 1. ORGANIC MANURE ISOLATED VIEW
@@ -47,14 +29,17 @@ export default function HomePage() {
   if (tenant.id === 'manure') {
     return (
       <main className="home-neu-main" ref={revealRef}>
-        {/* Manure Hero */}
+        {/* Manure Hero with 3D Floating Objects */}
         <section className="neu-hero" id="hero-section">
-          <ParticleField count={45} color="#059669" />
+          <FloatingObjects sector="manure" />
+          <ParticleField count={40} color="#059669" />
           <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(5, 150, 105, 0.18), transparent 70%)' }} />
 
           <div className="container neu-hero-content">
-            <div className="neu-pill" style={{ marginBottom: '1.2rem' }}>
-              <Leaf size={14} /> FCO 1985 Standard Compliant &bull; Govt. Verified SATAT Plant Partner
+            <div className="hero-eyebrow-wrapper">
+              <div className="neu-pill">
+                <Leaf size={14} /> FCO 1985 Standard Compliant &bull; Govt. Verified SATAT Plant Partner
+              </div>
             </div>
 
             <h1 className="neu-hero-title">
@@ -138,33 +123,35 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Manure Quality Lab Testing Protocol */}
+        {/* Client-Confidential Lab Testing Protocol Notice */}
         <section className="section" id="quality-lab-protocol">
           <div className="container">
             <div className="neu-lab-box neu-card">
               <div className="lab-box-grid">
                 <div>
-                  <span className="section-label">NABL Quality Protocol</span>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>Rigorous Moisture &amp; NPK Calibration</h3>
+                  <div className="coming-soon-label-pill">
+                    <Clock size={13} /> DIGITAL VAULT COMING SOON
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', margin: '0.6rem 0 0.8rem 0' }}>Client-Personal Laboratory Certifications</h3>
                   <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
-                    Every batch of Fermented Organic Manure is mechanically screened, de-stoned, and tested for primary nutrients (NPK), organic carbon content, and heavy metal compliance before weighbridge dispatch.
+                    Full NABL-accredited batch test certificates (covering FCO Schedule IV primary nutrients, C:N calibration, and heavy-metal screening) <strong>are provided personally when we connect directly with our clients upon verified sourcing request</strong>.
                   </p>
                   <div className="lab-check-bullets">
-                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Total Nitrogen (N): &gt; 1.5% - 2.2%</div>
-                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Available Phosphorus (P2O5): &gt; 1.0%</div>
-                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Water Soluble Potassium (K2O): &gt; 1.0%</div>
-                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Maximum Moisture Content: &lt; 30.0% (Hard Target)</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Total Nitrogen (N): &gt; 1.5% - 2.2% Tested</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Maximum Moisture Content: &lt; 30.0% Hard Cap</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Zero Weed Seeds &amp; Zero Pathogens Guarantee</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Batch COA dispatched with Dharma Kanta Tare Slip</div>
                   </div>
-                  <Link to="/lab-reports" className="neu-btn neu-btn-primary" style={{ marginTop: '1.5rem' }}>
-                    <FileText size={16} /> View NABL Accredited COA Reports
+                  <Link to="/contact" className="neu-btn neu-btn-primary" style={{ marginTop: '1.5rem' }}>
+                    <Shield size={16} /> Request Allocation &amp; Personal COA
                   </Link>
                 </div>
                 <div className="lab-certificate-preview neu-inset">
                   <div className="cert-pill">
-                    <ShieldCheck size={28} className="text-accent" />
-                    <strong>FCO Schedule IV Compliance Guaranteed</strong>
-                    <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                      Certified zero viable weed seeds, zero pathogenic E. coli or Salmonella.
+                    <Lock size={32} className="text-accent" />
+                    <strong style={{ marginTop: '8px' }}>Client-Confidential Batch Vault</strong>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Delivered directly to your registered business email upon verified dispatch schedule.
                     </p>
                   </div>
                 </div>
@@ -182,14 +169,17 @@ export default function HomePage() {
   if (tenant.id === 'feed') {
     return (
       <main className="home-neu-main" ref={revealRef}>
-        {/* Feed Hero */}
+        {/* Feed Hero with 3D Floating Objects */}
         <section className="neu-hero" id="hero-section">
-          <ParticleField count={45} color="#d97706" />
+          <FloatingObjects sector="feed" />
+          <ParticleField count={40} color="#d97706" />
           <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(217, 119, 6, 0.18), transparent 70%)' }} />
 
           <div className="container neu-hero-content">
-            <div className="neu-pill" style={{ marginBottom: '1.2rem', color: '#d97706', borderColor: 'rgba(217, 119, 6, 0.3)' }}>
-              <Wheat size={14} /> Grain Distillery Byproduct Allotment &bull; High Protein Nutrition
+            <div className="hero-eyebrow-wrapper">
+              <div className="neu-pill" style={{ color: '#d97706', borderColor: 'rgba(217, 119, 6, 0.3)' }}>
+                <Wheat size={14} /> Grain Distillery Byproduct Allotment &bull; High Protein Nutrition
+              </div>
             </div>
 
             <h1 className="neu-hero-title">
@@ -281,20 +271,22 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Feed Quality Lab Testing Protocol */}
+        {/* Feed Client-Confidential Testing Protocol Notice */}
         <section className="section" id="feed-quality-protocol">
           <div className="container">
             <div className="neu-lab-box neu-card">
               <div className="lab-box-grid">
                 <div>
-                  <span className="section-label" style={{ color: '#d97706' }}>Feed Safety &amp; Nutritional Lab Verification</span>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>Kjeldahl Crude Protein &amp; Aflatoxin Testing</h3>
+                  <div className="coming-soon-label-pill" style={{ color: '#d97706', borderColor: 'rgba(217, 119, 6, 0.3)' }}>
+                    <Clock size={13} /> FEED COA VAULT COMING SOON
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', margin: '0.6rem 0 0.8rem 0' }}>Client-Personal Nutritional Analysis Reports</h3>
                   <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
-                    Every consignment of Corn and Rice DDGS undergoes strict laboratory screening for moisture levels, fat content, and aflatoxin contamination (&lt; 20 ppb) to ensure zero toxicity for livestock and aquatic species.
+                    Complete Kjeldahl crude protein verification, HPLC amino acid breakdowns, and aflatoxin screening test sheets (&lt; 20 ppb) <strong>are provided personally when we connect directly with our clients upon verified order initiation</strong>.
                   </p>
                   <div className="lab-check-bullets">
-                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Corn DDGS Crude Protein: 28% - 32% Guaranteed</div>
-                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Rice DDGS Crude Protein: 40% - 45% Guaranteed</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Corn DDGS Crude Protein: 28% - 32% Verified</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Rice DDGS Crude Protein: 40% - 45% Verified</div>
                     <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Total Sugar Invert (Heavy Molasses): 46% - 50%</div>
                     <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Aflatoxin B1/B2/G1/G2: Screened &lt; 20 ppb Safe Level</div>
                   </div>
@@ -304,10 +296,10 @@ export default function HomePage() {
                 </div>
                 <div className="lab-certificate-preview neu-inset">
                   <div className="cert-pill">
-                    <ShieldCheck size={28} style={{ color: '#d97706' }} />
-                    <strong>Certified Feed Safety &amp; High Digestibility</strong>
-                    <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                      Complete Certificate of Analysis (COA) issued with weighbridge tare slip on loading.
+                    <Lock size={32} style={{ color: '#d97706' }} />
+                    <strong style={{ marginTop: '8px' }}>Confidential Mill Analysis</strong>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Certified batch COA sent with loading gate weighbridge records.
                     </p>
                   </div>
                 </div>
@@ -325,14 +317,17 @@ export default function HomePage() {
   if (tenant.id === 'seabuckthorn') {
     return (
       <main className="home-neu-main" ref={revealRef}>
-        {/* Sea Buckthorn Hero */}
+        {/* Sea Buckthorn Hero with 3D Floating Objects */}
         <section className="neu-hero" id="hero-section">
-          <ParticleField count={45} color="#ea580c" />
+          <FloatingObjects sector="seabuckthorn" />
+          <ParticleField count={40} color="#ea580c" />
           <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(234, 88, 12, 0.18), transparent 70%)' }} />
 
           <div className="container neu-hero-content">
-            <div className="neu-pill" style={{ marginBottom: '1.2rem', color: '#ea580c', borderColor: 'rgba(234, 88, 12, 0.3)' }}>
-              <Mountain size={14} /> High-Altitude Leh-Ladakh &bull; Wild Superfruit Extraction
+            <div className="hero-eyebrow-wrapper">
+              <div className="neu-pill" style={{ color: '#ea580c', borderColor: 'rgba(234, 88, 12, 0.3)' }}>
+                <Mountain size={14} /> High-Altitude Leh-Ladakh &bull; Wild Superfruit Extraction
+              </div>
             </div>
 
             <h1 className="neu-hero-title">
@@ -425,21 +420,23 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Sea Buckthorn GC-MS Lab Integrity Protocol */}
+        {/* Sea Buckthorn Client-Confidential Lab Protocol Notice */}
         <section className="section" id="botanical-lab-protocol">
           <div className="container">
             <div className="neu-lab-box neu-card">
               <div className="lab-box-grid">
                 <div>
-                  <span className="section-label" style={{ color: '#ea580c' }}>Accredited Analytical Chromatography</span>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>GC-MS Fatty Acid Profile &amp; Solvent Purity</h3>
+                  <div className="coming-soon-label-pill" style={{ color: '#ea580c', borderColor: 'rgba(234, 88, 12, 0.3)' }}>
+                    <Clock size={13} /> BOTANICAL VAULT COMING SOON
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', margin: '0.6rem 0 0.8rem 0' }}>Client-Personal Chromatography Reports</h3>
                   <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
-                    Unlike traditional hexane or chemical-solvent extracted oils, BioLink Himalayan Sea Buckthorn extracts are produced via cryogenic Supercritical Fluid CO₂ Extraction @ 35°C, ensuring 100% solvent-free purity and zero thermal degradation.
+                    Authentic GC-MS fatty acid profile certificates and microbiological purity sheets <strong>are provided personally when we connect directly with formulation clients upon verified pilot pack inquiry</strong>.
                   </p>
                   <div className="lab-check-bullets">
-                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Omega-7 Palmitoleic Acid: &gt; 32% in Pulp Oil</div>
-                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Heavy Metals (Lead, Arsenic, Cadmium, Mercury): Negative (NABL)</div>
-                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Residual Solvents: 0.0 ppm (100% Supercritical Fluid Extraction)</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Omega-7 Palmitoleic Acid: &gt; 32% Certified in Pulp Oil</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Heavy Metals (Lead, Mercury, Cadmium): Zero / NABL Negative</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> 100% Supercritical CO₂ Fluid Extraction @ 35°C (Zero Solvents)</div>
                     <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Natural Vitamin E (Tocopherols): &gt; 220 mg / 100g</div>
                   </div>
                   <Link to="/contact?sector=seabuckthorn" className="neu-btn neu-btn-primary" style={{ marginTop: '1.5rem', background: 'linear-gradient(135deg, #1e293b, #ea580c)' }}>
@@ -448,10 +445,10 @@ export default function HomePage() {
                 </div>
                 <div className="lab-certificate-preview neu-inset">
                   <div className="cert-pill">
-                    <ShieldCheck size={28} style={{ color: '#ea580c' }} />
-                    <strong>100% Wild Himalayan Leh-Ladakh Origin</strong>
-                    <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                      Cold-chain preserved batches with full traceability to altitude harvest clusters.
+                    <Lock size={32} style={{ color: '#ea580c' }} />
+                    <strong style={{ marginTop: '8px' }}>Proprietary Extract Data</strong>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Complete COA documentation delivered with sample dispatch.
                     </p>
                   </div>
                 </div>
@@ -468,14 +465,17 @@ export default function HomePage() {
   // ════════════════════════════════════════════════════════════
   return (
     <main className="home-neu-main" ref={revealRef}>
-      {/* Corporate Hero */}
+      {/* Corporate Hero with 3D Floating Objects */}
       <section className="neu-hero" id="hero-section">
-        <ParticleField count={45} color="#2563eb" />
+        <FloatingObjects sector="corporate" />
+        <ParticleField count={40} color="#2563eb" />
         <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(37, 99, 235, 0.15), transparent 70%)' }} />
 
         <div className="container neu-hero-content">
-          <div className="neu-pill" style={{ marginBottom: '1.2rem' }}>
-            <Globe size={14} /> India’s Precision Agricultural Infrastructure &amp; Supply Chain Corridor
+          <div className="hero-eyebrow-wrapper">
+            <div className="neu-pill">
+              <Globe size={14} /> India’s Precision Agricultural Infrastructure &amp; Supply Chain Corridor
+            </div>
           </div>
 
           <h1 className="neu-hero-title">

@@ -336,13 +336,14 @@ export default function LabReportsPage() {
       <section className="lab-reports-hero" style={{ position: 'relative' }}>
         <ParticleField />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <span className="badge badge-cyan">Quality Assurance</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(245, 158, 11, 0.12)', border: '1px solid rgba(245, 158, 11, 0.3)', color: '#b45309', fontWeight: 800, fontSize: '0.74rem', textTransform: 'uppercase', marginBottom: '1rem' }}>
+            🔒 Confidential Client Protocol: Batch Reports Shared Personally
+          </div>
           <h1 className="lab-reports-hero__title">
             Lab-Verified <span className="text-glow-hero">Test Reports</span>
           </h1>
           <p className="lab-reports-hero__subtitle">
-            Every batch dispatched through our platform undergoes rigorous testing at NABL-accredited and
-            government-recognized laboratories. Below are visual summaries of our latest certified results.
+            Every batch dispatched through our platform undergoes rigorous testing at NABL-accredited and government-recognized laboratories. Complete batch test sheets and Certificates of Analysis (COA) <strong>are provided personally when we connect directly with our clients upon verified sourcing request</strong>.
           </p>
 
           <div className="lab-reports-location">
