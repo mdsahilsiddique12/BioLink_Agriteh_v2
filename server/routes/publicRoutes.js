@@ -100,33 +100,31 @@ router.post(
       }
     });
 
-    const alertHtmlContent = `
-        <h2>New Institutional Inquiry Routed via biolinkagri.in</h2>
-        <p><b>Prospect Identity:</b> ${clientName} (${clientEmail})</p>
-        <p><b>Company/Estate Title:</b> ${companyTitle || 'N/A'}</p>
-        <p><b>Target Volumetric Scale:</b> ${targetTonnage || 'N/A'} Metric Tonnes</p>
-        <p><b>Context Category:</b> ${subject}</p>
-        <p><b>Message Content:</b> ${description}</p>
-    `;
+    const alertHtmlContent = buildContactEmail({
+      name: clientName,
+      email: clientEmail,
+      phone: '',
+      enquiryType: subject,
+      message: `${companyTitle ? `[Company/Estate: ${companyTitle}]\n` : ''}${description}`,
+      productSector: subject || 'Institutional Marketplace',
+      requestedTonnage: targetTonnage ? String(targetTonnage) : '15+',
+    });
 
-    const clientReceiptHtml = `
-        <h3>Hello ${clientName},</h3>
-        <p>Thank you for reaching out to the <b>BioLink Agri</b> procurement desk.</p>
-        <p>Your institutional bulk query regarding <b>"${subject}"</b> has been logged securely into our regional routing queue. Our supply chain allocation team will cross-reference live GOBARdhan plant inventory datasets matching your target location and dispatch an all-inclusive 15-tonne FTL quote via WhatsApp within 24 hours.</p>
-        <p>Regards,</p>
-        <p><b>BioLink Agri Support Desk</b><br/>Patna, Bihar, India<br/>🌐 biolinkagri.in</p>
-    `;
+    const clientReceiptHtml = buildContactAutoReply({
+      name: clientName,
+      productSector: subject || 'BioLink Enterprise Sourcing',
+    });
 
     await Promise.allSettled([
       sendSystemEmail({
         to: 'info@biolinkagri.in',
-        subject: `🚨 [MARKETPLACE INQUIRY]: ${subject}`,
+        subject: `🚨 [MARKETPLACE INQUIRY]: ${subject} (${targetTonnage ? `${targetTonnage} MT` : 'Bulk'})`,
         html: alertHtmlContent,
         replyTo: clientEmail,
       }),
       sendSystemEmail({
         to: clientEmail,
-        subject: "We have received your bulk agri-input request - BioLink Agri",
+        subject: "We have received your bulk agri-input request — BioLink Agri",
         html: clientReceiptHtml,
       }),
     ]);
@@ -265,16 +263,15 @@ router.post(
       sendSystemEmail({
         to: 'info@biolinkagri.in',
         subject: `New quote lead: ${draft.product} / ${draft.volume} MT`,
-        html: `
-          <h2>New Quote Lead</h2>
-          <p><strong>Name:</strong> ${payload.name}</p>
-          <p><strong>Email:</strong> ${payload.email}</p>
-          <p><strong>WhatsApp:</strong> ${payload.whatsapp}</p>
-          <p><strong>Product:</strong> ${draft.product}</p>
-          <p><strong>Volume:</strong> ${draft.volume} MT</p>
-          <p><strong>Pincode:</strong> ${draft.pincode}</p>
-          <p><strong>Total Quote:</strong> Rs. ${draft.quote.total.toLocaleString('en-IN')}</p>
-        `,
+        html: buildContactEmail({
+          name: payload.name,
+          email: payload.email,
+          phone: payload.whatsapp,
+          enquiryType: `Instant Quote Claim: ${draft.product}`,
+          message: `Delivery PIN: ${draft.pincode}\nVolume: ${draft.volume} MT\nDelivered Rate: Rs. ${draft.quote.pricePerTon}/MT\nGrand Total: Rs. ${draft.quote.total.toLocaleString('en-IN')}`,
+          productSector: draft.product,
+          requestedTonnage: String(draft.volume),
+        }),
         replyTo: payload.email,
       }),
       sendSystemEmail({
@@ -320,11 +317,15 @@ router.post(
       sendSystemEmail({
         to: config.emailFromAddress,
         subject: `Retail notify signup: ${payload.productName}`,
-        html: `
-          <h2>Retail Launch Signup</h2>
-          <p><strong>Product:</strong> ${payload.productName}</p>
-          <p><strong>Email:</strong> ${payload.email}</p>
-        `,
+        html: buildContactEmail({
+          name: 'Subscriber',
+          email: payload.email,
+          phone: '',
+          enquiryType: `Retail Early Access: ${payload.productName}`,
+          message: `User subscribed to retail launch notifications for ${payload.productName}.`,
+          productSector: payload.productName,
+          requestedTonnage: 'Retail',
+        }),
         replyTo: payload.email,
       }),
     ]);

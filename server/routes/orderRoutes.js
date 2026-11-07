@@ -14,6 +14,7 @@ import {
   buildPlantNotification,
   buildQAClearanceEmail,
   buildSettlementConfirmEmail,
+  buildOrderDisputedEmail,
   sendSystemEmail,
 } from '../services/emailService.js';
 import {
@@ -454,21 +455,19 @@ router.post(
 
     await order.save();
 
-    // Notify admin for manual resolution
+    // Notify admin & buyer of formal dispute registration
     const buyer = order.buyerId;
     await sendSystemEmail({
       to: config.emailFromAddress,
-      subject: `DISPUTE raised on order ${order.trackingId}`,
-      html: `
-        <h2>Escrow Dispute Alert</h2>
-        <p><strong>Order:</strong> ${order.trackingId}</p>
-        <p><strong>Buyer:</strong> ${buyer?.name || 'Unknown'} (${buyer?.email || 'N/A'})</p>
-        <p><strong>Amount Held:</strong> Rs. ${order.totalPaid.toLocaleString('en-IN')}</p>
-        <p><strong>Dispute Reason:</strong></p>
-        <p>${payload.reason}</p>
-        <p>Manual review required. Funds remain in escrow until resolution.</p>
-      `,
-    });
+      subject: `⚠️ DISPUTE Raised on Consignment ${order.trackingId} — Escrow Locked`,
+      html: buildOrderDisputedEmail({
+        buyerName: buyer?.name || 'Institutional Client',
+        trackingId: order.trackingId,
+        reason: payload.reason,
+        disputeRef: `DSP-${order.trackingId}`,
+        adminEmail: config.emailFromAddress,
+      }),
+    }).catch((err) => console.warn('Dispute email notification warning:', err.message));
 
     res.json({
       status: 'success',

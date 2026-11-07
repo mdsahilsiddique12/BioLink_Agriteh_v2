@@ -16,6 +16,11 @@ import {
   partnerRegisterSchema,
   partnerPasswordChangeSchema,
 } from '../utils/validators.js';
+import {
+  sendSystemEmail,
+  buildPartnerWelcomeEmail,
+  buildPartnerPasswordChangeEmail,
+} from '../services/emailService.js';
 
 const router = express.Router();
 
@@ -240,6 +245,19 @@ router.post(
         { expiresIn: '7d' }
       );
 
+      // Dispatch welcome notification to new partner
+      sendSystemEmail({
+        to: email,
+        subject: `Welcome to BioLink Partner Network — Code: ${referralCode.code} Activated!`,
+        html: buildPartnerWelcomeEmail({
+          partnerName: partner.name,
+          referralCode: referralCode.code,
+          email: partner.email,
+          company: partner.company,
+          loginUrl: `${config.settleBaseUrl.replace('/orders/settle', '')}/partner/login`,
+        }),
+      }).catch((err) => console.warn('Partner welcome email send warning:', err.message));
+
       return res.json({
         token,
         partner: {
@@ -260,6 +278,19 @@ router.post(
         config.jwtSecret,
         { expiresIn: '7d' }
       );
+
+      // Dispatch welcome notification in demo mode
+      sendSystemEmail({
+        to: email,
+        subject: `Welcome to BioLink Partner Network — Code: ${codeStr} Activated!`,
+        html: buildPartnerWelcomeEmail({
+          partnerName: payload.name,
+          referralCode: codeStr,
+          email,
+          company: payload.company || `${payload.name} Solutions`,
+          loginUrl: `https://biolinkagri.in/partner/login`,
+        }),
+      }).catch((err) => console.warn('Partner demo welcome email send warning:', err.message));
 
       return res.json({
         token,
@@ -822,6 +853,16 @@ router.patch(
 
     partner.password = payload.newPassword;
     await partner.save();
+
+    // Send security notification
+    sendSystemEmail({
+      to: partner.email,
+      subject: 'Security Alert: Password Updated for BioLink Partner Account',
+      html: buildPartnerPasswordChangeEmail({
+        partnerName: partner.name,
+        email: partner.email,
+      }),
+    }).catch((err) => console.warn('Partner password change email warning:', err.message));
 
     res.json({ message: 'Password updated successfully.' });
   })
