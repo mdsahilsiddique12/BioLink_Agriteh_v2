@@ -8,16 +8,16 @@
   z-index: 1;
 }
 
-/* ── Neumorphic Hero Section ── */
+/* ── Neumorphic Hero Section (Perfect Centering for All Tabs) ── */
 .neu-hero {
   position: relative;
-  padding: 3rem 0 var(--space-3xl);
+  padding: calc(var(--navbar-height) + 4.5rem) 0 var(--space-3xl);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  min-height: 82vh;
+  min-height: 86vh;
 }
 
 .neu-hero-glow {
@@ -36,40 +36,59 @@
 .neu-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 920px;
+  max-width: 980px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
 }
 
 .hero-eyebrow-wrapper {
   margin-bottom: 1.4rem;
   display: flex;
+  align-items: center;
   justify-content: center;
   width: 100%;
+  text-align: center;
 }
 
 .neu-hero-title {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   font-size: clamp(2.3rem, 5vw, 4.1rem);
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.18;
   letter-spacing: -0.025em;
   margin-bottom: var(--space-lg);
   color: var(--theme-primary);
   text-align: center;
+  text-wrap: balance;
+  width: 100%;
+}
+
+.neu-hero-title span {
+  display: block;
+  text-align: center;
+  text-wrap: balance;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .neu-hero-sub {
   font-size: clamp(1rem, 2vw, 1.15rem);
   color: var(--text-muted);
   line-height: 1.7;
-  max-width: 760px;
+  max-width: 780px;
   margin: 0 auto var(--space-2xl);
   text-align: center;
+  text-wrap: balance;
+  width: 100%;
 }
 
 .neu-hero-actions {
@@ -79,6 +98,8 @@
   gap: var(--space-md);
   margin-bottom: var(--space-3xl);
   flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
 }
 
 /* ── Neumorphic Stat Strip ── */
