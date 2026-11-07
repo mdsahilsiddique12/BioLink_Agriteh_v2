@@ -1,0 +1,35 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# 1. ROUTE THE IMAGE PATH STRAIGHT TO THE SERVERLESS FUNCTION (MUST BE FIRST)
+[[redirects]]
+  from = "/track.png"
+  to = "/.netlify/functions/track"
+  status = 200
+  force = true
+
+# 2. ROUTE YOUR REGULAR API ENDPOINTS
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# 3. ROUTE THE FALLBACK TO VITE'S COMPILED APP IN THE DIST FOLDER (MUST BE LAST)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

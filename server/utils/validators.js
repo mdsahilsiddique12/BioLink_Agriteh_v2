@@ -1,0 +1,167 @@
+import { z } from 'zod';
+
+const indianPhoneRegex = /^[+]?[0-9][0-9\s-]{7,19}$/;
+const pincodeRegex = /^[0-9]{6}$/;
+
+export const registerSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: z.email().max(180),
+  password: z.string().min(8).max(100),
+  role: z.enum(['buyer', 'plant_partner']),
+  phone: z.string().trim().regex(indianPhoneRegex).optional().or(z.literal('')),
+});
+
+export const loginSchema = z.object({
+  email: z.email().max(180),
+  password: z.string().min(8).max(100),
+});
+
+export const contactSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: z.email().max(180),
+  phone: z.string().trim().regex(indianPhoneRegex).optional().or(z.literal('')),
+  enquiryType: z.string().trim().min(2).max(80),
+  message: z.string().trim().min(10).max(4000),
+  website: z.string().max(0).optional(),
+});
+
+export const validProducts = [
+  'solid-fom',
+  'liquid-slurry',
+  'vermigold-blend',
+  'corn-ddgs-bulk',
+  'rice-ddgs-bulk',
+  'heavy-cane-molasses',
+  'sbt-supercritical-seed-oil',
+  'sbt-berry-pulp-oil',
+  'sbt-freeze-dried-powder',
+];
+
+export const quoteCalculationSchema = z.object({
+  product: z.string().trim().min(2).max(100),
+  volume: z.coerce.number().min(5).max(5000),
+  pincode: z.string().regex(pincodeRegex),
+  referralCode: z.string().trim().min(2).max(30).optional().or(z.literal('')),
+});
+
+export const quoteClaimSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: z.email().max(180),
+  whatsapp: z.string().trim().min(7).max(30),
+  company: z.string().trim().min(2).max(120).optional().or(z.literal('')),
+  product: z.string().trim().min(2).max(100),
+  volume: z.coerce.number().min(5).max(5000),
+  pincode: z.string().trim().min(5).max(10),
+  referralCode: z.string().trim().min(2).max(30).optional().or(z.literal('')),
+  website: z.string().max(0).optional(),
+});
+
+export const retailNotifySchema = z.object({
+  email: z.email().max(180),
+  productId: z.string().trim().min(2).max(120),
+  productName: z.string().trim().min(2).max(160),
+  website: z.string().max(0).optional(),
+});
+
+export const sampleOrderSchema = z.object({
+  name: z.string().trim().min(2, { message: 'Please enter your full name' }).max(120),
+  email: z.email({ message: 'Please enter a valid email address' }).max(180),
+  whatsapp: z.string().trim().min(7, { message: 'Please enter a valid WhatsApp number' }).max(30),
+  address: z.string().trim().min(10, { message: 'Please enter your complete delivery address' }).max(400),
+  pincode: z.string().trim().regex(pincodeRegex, { message: 'Please enter a valid 6-digit Indian PIN code' }),
+  sampleSize: z.enum(['20kg', '30kg', '50kg'], { message: 'Please select a sample size (20kg, 30kg, or 50kg)' }),
+  intendedUse: z.enum(['farming', 'dealership', 'farmer', 'partnership', 'other'], { message: 'Please select intended use' }),
+  intendedUseOther: z.string().trim().max(200).optional().or(z.literal('')),
+  cropType: z.string().trim().max(120).optional().or(z.literal('')),
+  notes: z.string().trim().max(1000).optional().or(z.literal('')),
+  website: z.string().max(0).optional(), // Honeypot anti-bot
+});
+
+export const seaBuckthornSampleSchema = z.object({
+  companyName: z.string().trim().min(2, { message: 'Please enter your company or brand name' }).max(140),
+  name: z.string().trim().min(2, { message: 'Please enter your contact name' }).max(120),
+  email: z.email({ message: 'Please enter a valid email address' }).max(180),
+  whatsapp: z.string().trim().min(7, { message: 'Please enter a valid WhatsApp number' }).max(30),
+  requiredFormat: z.string().trim().min(2).max(100),
+  monthlyVolume: z.string().trim().min(2).max(100),
+  pincode: z.string().trim().max(10).optional().or(z.literal('')),
+  notes: z.string().trim().max(1000).optional().or(z.literal('')),
+  website: z.string().max(0).optional(),
+});
+
+export const trackingSchema = z.object({
+  trackingId: z.string().trim().min(6).max(40),
+});
+
+// ─── Order Schemas (Security-Hardened) ────────────────────────────
+
+/**
+ * Order creation — enforces 15-ton minimum order quantity (MOQ).
+ * The backend NEVER trusts client-side price data; all costs are
+ * calculated server-side from database values.
+ */
+export const orderSchema = z.object({
+  listingId: z.string().trim().min(8).max(50),
+  quantityTons: z.coerce.number().min(15, {
+    message: 'Order rejected. Minimum transaction threshold is 15 Metric Tons.',
+  }).max(10000),
+  distanceKm: z.coerce.number().min(1).max(5000),
+  deliveryAddress: z.string().trim().min(10).max(280),
+  referralCode: z.string().trim().min(2).max(30).optional().or(z.literal('')),
+});
+
+/**
+ * QA settlement — buyer submits the raw token received via email
+ * to confirm quality clearance (moisture <30%, batch clean).
+ */
+export const settleSchema = z.object({
+  orderId: z.string().trim().min(8).max(50),
+  qaClearanceToken: z.string().trim().min(32).max(128),
+});
+
+/**
+ * Dispute — buyer rejects quality and provides a reason.
+ * Triggers escrow refund workflow.
+ */
+export const disputeSchema = z.object({
+  orderId: z.string().trim().min(8).max(50),
+  qaClearanceToken: z.string().trim().min(32).max(128),
+  reason: z.string().trim().min(10, {
+    message: 'Please provide a detailed reason for the dispute (minimum 10 characters).',
+  }).max(2000),
+});
+
+/**
+ * Status transition — used by plant partners / admin to advance
+ * the order through: ESCROW_HELD → DISPATCHED → QA_PENDING.
+ */
+export const statusTransitionSchema = z.object({
+  orderId: z.string().trim().min(8).max(50),
+  nextStatus: z.enum(['DISPATCHED', 'QA_PENDING']),
+});
+
+// ─── Partner Schemas ──────────────────────────────────────────────
+
+export const partnerLoginSchema = z.object({
+  email: z.email().max(180),
+  password: z.string().min(8).max(100),
+});
+
+export const partnerRegisterSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: z.email().max(180),
+  password: z.string().min(8).max(100),
+  phone: z.string().trim().optional().or(z.literal('')),
+  company: z.string().trim().max(120).optional().or(z.literal('')),
+  requestedCode: z.string().trim().max(30).optional().or(z.literal('')),
+});
+
+export const partnerPasswordChangeSchema = z.object({
+  currentPassword: z.string().min(8).max(100),
+  newPassword: z.string().min(8).max(100),
+});
+
+export const referralCodeValidationSchema = z.object({
+  code: z.string().trim().min(2).max(30),
+});
+
