@@ -68,12 +68,13 @@
   max-width: 920px;
   width: 100%;
   margin: 0 auto;
-  background: var(--glass-bg, rgba(13, 21, 38, 0.75));
-  backdrop-filter: blur(var(--glass-blur, 20px));
-  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
-  border-radius: var(--radius-xl, 20px);
+  background: var(--bg-glass, rgba(255, 255, 255, 0.75));
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.8));
+  border-radius: var(--radius-xl, 24px);
   padding: 2.5rem;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--neu-shadow-lg, 0 16px 48px rgba(0, 0, 0, 0.08));
   min-height: auto;
   height: auto !important;
   max-height: none !important;

@@ -1,22 +1,17 @@
-.product-spec-card {
+/* ============================================================
+   NEUMORPHIC PRODUCT SPEC CARD
+   ============================================================ */
+
+.neu-spec-card {
   padding: var(--space-xl);
   border-radius: var(--radius-xl);
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-card);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s ease;
-  position: relative;
+  text-align: left;
 }
 
-.product-spec-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--border-glow);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-}
-
-.product-spec-header {
+.spec-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,140 +20,111 @@
   gap: 6px;
 }
 
-.spec-badge {
+.spec-badge-pill {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-full);
+  background: #ffffff;
+  box-shadow: var(--neu-shadow-sm);
+  color: var(--theme-accent);
+  border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
-.spec-badge--green {
-  background: rgba(5, 150, 105, 0.1);
-  color: #059669;
-  border: 1px solid rgba(5, 150, 105, 0.25);
-}
-
-.spec-badge--gold {
-  background: rgba(245, 158, 11, 0.12);
-  color: #d97706;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.spec-badge--orange {
-  background: rgba(234, 88, 12, 0.12);
-  color: #ea580c;
-  border: 1px solid rgba(234, 88, 12, 0.3);
-}
-
-.spec-badge--cyan {
-  background: rgba(2, 132, 199, 0.1);
-  color: #0284c7;
-  border: 1px solid rgba(2, 132, 199, 0.25);
-}
-
-.spec-metric-tag {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  background: rgba(15, 23, 42, 0.04);
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.product-spec-title {
-  font-size: 1.25rem;
+.spec-npk-tag {
+  font-size: 0.74rem;
   font-weight: 800;
-  color: var(--neon-green);
-  line-height: 1.35;
-  margin-bottom: 0.4rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  background: var(--bg-inset);
+  box-shadow: var(--neu-inset);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
 }
 
-.product-spec-tagline {
-  font-size: 0.86rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
+.spec-title-area {
   margin-bottom: var(--space-md);
 }
 
-/* ── Crisp Low-Border Datasheet Grid ── */
-.product-datasheet-grid {
+.spec-card-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--theme-primary);
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+}
+
+.spec-card-sub {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ── Datasheet Inset Grid ── */
+.spec-datasheet-inset {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  background: rgba(15, 23, 42, 0.02);
-  border: 1px solid var(--border-subtle);
+  gap: 10px;
+  padding: 12px 14px;
   border-radius: var(--radius-md);
-  padding: 12px;
   margin-bottom: var(--space-md);
 }
 
-.datasheet-item {
+.spec-stat-cell {
   display: flex;
   flex-direction: column;
 }
 
-.datasheet-key {
+.stat-key {
   font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
-  letter-spacing: 0.05em;
+  font-weight: 800;
+  color: var(--text-light);
+  letter-spacing: 0.06em;
   margin-bottom: 2px;
 }
 
-.datasheet-val {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-primary);
+.stat-val {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-main);
   font-family: var(--font-mono);
 }
 
-/* ── Features List ── */
-.spec-features-list {
+/* ── Bullets List ── */
+.spec-bullets-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: var(--space-lg);
 }
 
-.spec-feature-bullet {
+.spec-bullet-row {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.82rem;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: var(--text-main);
 }
 
-.text-accent {
-  color: var(--neon-cyan);
-}
-
-/* ── Card Footer ── */
-.product-spec-footer {
-  border-top: 1px solid var(--border-subtle);
-  padding-top: var(--space-md);
-}
-
-.spec-footer-actions {
+/* ── Footer ── */
+.spec-card-footer {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.btn-sm {
-  padding: 8px 14px;
-  font-size: 0.78rem;
+.spec-action-btn {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.76rem;
+  white-space: nowrap;
 }
 
 .spec-coa-btn {
-  padding: 8px 12px;
-  border-color: var(--border-subtle);
-  color: var(--text-secondary);
-}
-
-.spec-coa-btn:hover {
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
+  padding: 10px 12px;
 }

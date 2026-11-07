@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import SectorSwitcher from './components/SectorSwitcher';
 import HomePage from './pages/HomePage';
 import InstitutionalPage from './pages/InstitutionalPage';
 import RetailShopPage from './pages/RetailShopPage';
@@ -29,7 +28,7 @@ function ScrollToTop() {
   return null;
 }
 
-// Sector router helper that syncs path to sector
+// Helper to switch sector when accessing sector route aliases
 function SectorRouteSync({ sector }) {
   const { switchTenant, tenant } = useSubdomain();
   useEffect(() => {
@@ -45,20 +44,20 @@ function AppContent() {
   return (
     <>
       <ScrollToTop />
-      {/* BioLink Multi-Sector Network Switcher Bar */}
-      <SectorSwitcher />
+      {/* Sleek Neumorphic Executive Navbar (Without top network banner) */}
       <Navbar />
       <Routes>
-        {/* Dynamic Multi-Tenant Home */}
+        {/* Dynamic Sector Home (Manure / Feed / Sea Buckthorn / Corporate) */}
         <Route path="/" element={<HomePage />} />
         
-        {/* Dedicated Sector Subdomain Spaces / Path Aliases */}
+        {/* Direct Sector Route Aliases */}
         <Route path="/manure" element={<SectorRouteSync sector="manure" />} />
         <Route path="/feed" element={<SectorRouteSync sector="feed" />} />
+        <Route path="/ddgs" element={<SectorRouteSync sector="feed" />} />
         <Route path="/seabuckthorn" element={<SectorRouteSync sector="seabuckthorn" />} />
         <Route path="/wellness" element={<SectorRouteSync sector="seabuckthorn" />} />
 
-        {/* Core Commerce & Operations */}
+        {/* Core Operations & Desk Pages */}
         <Route path="/sample" element={<SampleOrderPage />} />
         <Route path="/sample-order" element={<SampleOrderPage />} />
         <Route path="/samples" element={<SampleOrderPage />} />

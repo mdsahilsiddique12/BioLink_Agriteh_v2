@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, User, LogOut, Sparkles, Globe, Leaf, Wheat, Mountain, Shield, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ChevronDown, User, LogOut, ArrowRight, Globe, Leaf, Wheat, Mountain, Shield, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useSubdomain } from '../context/SubdomainContext';
 import './Navbar.css';
@@ -15,7 +15,7 @@ export default function Navbar() {
   const { tenant, switchTenant, allTenants } = useSubdomain();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 25);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -42,140 +42,146 @@ export default function Navbar() {
     seabuckthorn: Mountain,
   };
 
-  const navLinks = [
-    { to: '/', label: 'Overview' },
-    { to: '/sample', label: 'Order Sample' },
-    { to: '/institutional', label: 'Institutional Desk' },
-    { to: '/lab-reports', label: 'COA Vault' },
-    { to: '/logistics', label: 'Freight & Corridors' },
-    { to: '/about', label: 'Corporate' },
-    { to: '/contact', label: 'Contact' },
-  ];
+  const CurrentIcon = sectorIcons[tenant.id] || Globe;
+
+  // Sector-specific main CTA button
+  const getCtaConfig = () => {
+    switch (tenant.id) {
+      case 'manure':
+        return { label: 'Order FOM Sample', to: '/sample', icon: Sparkles };
+      case 'feed':
+        return { label: 'Get Feed Allocation', to: '/institutional?sector=feed', icon: ArrowRight };
+      case 'seabuckthorn':
+        return { label: 'Request Pilot COA', to: '/contact?sector=seabuckthorn', icon: Sparkles };
+      default:
+        return { label: 'Instant Bulk Quote', to: '/institutional', icon: ArrowRight };
+    }
+  };
+
+  const ctaConfig = getCtaConfig();
+  const CtaIcon = ctaConfig.icon;
 
   return (
-    <header className="navbar-wrapper">
-      <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} id="main-nav">
+    <header className="neu-navbar-wrapper">
+      <nav className={`neu-navbar ${scrolled ? 'neu-navbar--scrolled' : ''}`} id="main-nav">
         <div className="navbar__inner container">
-          {/* Logo & Dynamic Sector Badge */}
-          <div className="navbar__brand-group">
-            <Link to="/" className="navbar__logo" id="nav-logo">
-              <div className="navbar__logo-icon">
-                <img src="/logo.png" alt="BioLink Logo" className="navbar__logo-img" />
+          {/* Brand Logo & Sector Indicator Pill */}
+          <div className="navbar__brand-area">
+            <Link to="/" className="navbar__brand" id="nav-logo">
+              <div className="neu-logo-container">
+                <img src="/logo.png" alt="BioLink" className="navbar__logo-img" />
               </div>
-              <div className="navbar__logo-text">
-                <span className="navbar__logo-brand">BioLink</span>
-                <span className="navbar__logo-sub">Agritech</span>
+              <div className="navbar__brand-copy">
+                <span className="navbar__brand-title">BioLink</span>
+                <span className="navbar__brand-sector">{tenant.shortName}</span>
               </div>
             </Link>
 
-            {/* Interactive Sector Switcher Dropdown in Navbar */}
-            <div className="sector-select-dropdown-wrap" ref={dropdownRef}>
+            {/* Neumorphic Sector Switcher Pill */}
+            <div className="neu-sector-dropdown-wrap" ref={dropdownRef}>
               <button
-                className="sector-current-pill"
+                className="neu-sector-trigger"
                 onClick={() => setSectorDropdownOpen(!sectorDropdownOpen)}
+                id="nav-sector-trigger"
+                title="Switch Dedicated Sector Space"
                 aria-expanded={sectorDropdownOpen}
-                id="navbar-sector-pill"
               >
-                <span className="sector-pill-dot" />
-                <span className="sector-pill-name">{tenant.shortName}</span>
-                <ChevronDown size={14} className={`sector-pill-arrow ${sectorDropdownOpen ? 'rotated' : ''}`} />
+                <CurrentIcon size={14} className="sector-icon-active" />
+                <span className="sector-trigger-label">{tenant.shortName}</span>
+                <ChevronDown size={13} className={`sector-trigger-caret ${sectorDropdownOpen ? 'rotated' : ''}`} />
               </button>
 
               {sectorDropdownOpen && (
-                <div className="sector-dropdown-card glass-card">
-                  <div className="sector-dropdown-header">
-                    <span>Select Agricultural / Industrial Sector</span>
+                <div className="neu-sector-popover neu-card">
+                  <div className="popover-header">
+                    <span>Switch Dedicated Sector</span>
                   </div>
-                  {Object.values(allTenants).map((t) => {
-                    const Icon = sectorIcons[t.id] || Globe;
-                    const isCurrent = tenant.id === t.id;
-
-                    return (
-                      <button
-                        key={t.id}
-                        onClick={() => {
-                          switchTenant(t.id);
-                          setSectorDropdownOpen(false);
-                        }}
-                        className={`sector-dropdown-item ${isCurrent ? 'sector-dropdown-item--current' : ''}`}
-                      >
-                        <div className="sector-dropdown-icon">
-                          <Icon size={18} />
-                        </div>
-                        <div className="sector-dropdown-details">
-                          <div className="sector-dropdown-title-row">
-                            <span className="sector-dropdown-title">{t.name}</span>
-                            {t.id === 'seabuckthorn' && <span className="badge-new">NEW</span>}
+                  <div className="popover-list">
+                    {Object.values(allTenants).map((t) => {
+                      const Icon = sectorIcons[t.id] || Globe;
+                      const isCurrent = tenant.id === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          onClick={() => {
+                            switchTenant(t.id);
+                            setSectorDropdownOpen(false);
+                          }}
+                          className={`popover-item ${isCurrent ? 'popover-item--current' : ''}`}
+                        >
+                          <div className={`popover-item-icon popover-item-icon--${t.id}`}>
+                            <Icon size={16} />
                           </div>
-                          <span className="sector-dropdown-sub">{t.themeName} &bull; {t.subdomain ? `${t.subdomain}.biolinkagri.in` : 'biolinkagri.in'}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
+                          <div className="popover-item-text">
+                            <span className="popover-item-title">{t.name}</span>
+                            <span className="popover-item-sub">{t.tagline}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Desktop Nav Links */}
-          <div className="navbar__links">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`navbar__link ${location.pathname === link.to ? 'navbar__link--active' : ''}`}
-                id={`nav-link-${link.label.toLowerCase().replace(/[\s&]/g, '-')}`}
-              >
-                <span className="navbar__link-text">{link.label}</span>
-                {location.pathname === link.to && <span className="navbar__link-indicator" />}
-              </Link>
-            ))}
+          {/* Consolidated, Clean, Executive Desktop Navigation (4 Working Links) */}
+          <div className="navbar__nav-links">
+            <a href="#product-specifications" className="neu-nav-item">
+              Specifications
+            </a>
+            <a href="#tonnage-calculator" className="neu-nav-item">
+              Freight Calculator
+            </a>
+            <Link to="/lab-reports" className={`neu-nav-item ${location.pathname === '/lab-reports' ? 'active' : ''}`}>
+              COA Reports
+            </Link>
+            <Link to="/logistics" className={`neu-nav-item ${location.pathname === '/logistics' ? 'active' : ''}`}>
+              Logistics &amp; Escrow
+            </Link>
           </div>
 
-          {/* Right Actions */}
+          {/* Right Action Cluster */}
           <div className="navbar__actions">
             {user ? (
-              <div className="navbar__user-profile">
-                <div className="navbar__user-badge">
-                  <User size={13} />
-                  <span className="navbar__user-name">{user.name}</span>
-                </div>
-                <button onClick={logout} className="btn btn-outline navbar__logout-btn">
-                  <LogOut size={13} />
+              <div className="navbar__user-node">
+                <span className="user-name">{user.name}</span>
+                <button onClick={logout} className="user-logout-btn" title="Logout">
+                  <LogOut size={14} />
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="btn btn-ghost navbar__login-btn">
-                Portal Login
+              <Link to="/login" className="neu-ghost-link">
+                Login
               </Link>
             )}
 
-            <Link to="/sample" className="btn btn-outline navbar__sample-btn">
-              <Sparkles size={13} /> Order Sample
+            {/* Primary Sector CTA */}
+            <Link to={ctaConfig.to} className="neu-btn neu-btn-primary neu-nav-cta" id="nav-cta-btn">
+              <span>{ctaConfig.label}</span>
+              <CtaIcon size={14} />
             </Link>
 
-            <Link to="/institutional" className="btn btn-primary navbar__cta">
-              Get Bulk Quote
-            </Link>
-
+            {/* Mobile Hamburger Button */}
             <button
-              className="navbar__mobile-toggle"
+              className="neu-mobile-toggle"
               onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle navigation"
+              aria-label="Toggle menu"
             >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
-        <div className={`navbar__mobile ${mobileOpen ? 'navbar__mobile--open' : ''}`}>
-          <div className="navbar__mobile-inner">
-            <div className="mobile-sector-picker">
-              <span className="mobile-section-label">Select Dedicated Sector:</span>
-              <div className="mobile-sector-grid">
+        {/* Mobile Neumorphic Drawer */}
+        <div className={`neu-mobile-drawer ${mobileOpen ? 'open' : ''}`}>
+          <div className="mobile-drawer-inner neu-card">
+            <div className="mobile-sector-switch-section">
+              <span className="drawer-label">Active Sector Space:</span>
+              <div className="mobile-sector-chips">
                 {Object.values(allTenants).map((t) => {
                   const Icon = sectorIcons[t.id] || Globe;
+                  const isCurrent = tenant.id === t.id;
                   return (
                     <button
                       key={t.id}
@@ -183,7 +189,7 @@ export default function Navbar() {
                         switchTenant(t.id);
                         setMobileOpen(false);
                       }}
-                      className={`mobile-sector-btn ${tenant.id === t.id ? 'active' : ''}`}
+                      className={`mobile-chip ${isCurrent ? 'active' : ''}`}
                     >
                       <Icon size={14} />
                       <span>{t.shortName}</span>
@@ -193,24 +199,30 @@ export default function Navbar() {
               </div>
             </div>
 
-            <div className="mobile-nav-links">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`navbar__mobile-link ${location.pathname === link.to ? 'active' : ''}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div className="mobile-links-section">
+              <a href="#product-specifications" className="mobile-link" onClick={() => setMobileOpen(false)}>
+                Specifications &amp; Catalog
+              </a>
+              <a href="#tonnage-calculator" className="mobile-link" onClick={() => setMobileOpen(false)}>
+                Freight &amp; Route Estimator
+              </a>
+              <Link to="/lab-reports" className="mobile-link" onClick={() => setMobileOpen(false)}>
+                NABL Lab Reports (COA)
+              </Link>
+              <Link to="/logistics" className="mobile-link" onClick={() => setMobileOpen(false)}>
+                Logistics &amp; Escrow Tracking
+              </Link>
+              <Link to="/about" className="mobile-link" onClick={() => setMobileOpen(false)}>
+                About BioLink
+              </Link>
+              <Link to="/contact" className="mobile-link" onClick={() => setMobileOpen(false)}>
+                Contact Support Desk
+              </Link>
             </div>
 
-            <div className="mobile-nav-footer">
-              <Link to="/sample" className="btn btn-outline" style={{ width: '100%', marginBottom: '8px' }}>
-                <Sparkles size={14} /> Order Lab Test Sample
-              </Link>
-              <Link to="/institutional" className="btn btn-primary" style={{ width: '100%' }}>
-                Get 15+ MT Institutional Quote
+            <div className="mobile-cta-section">
+              <Link to={ctaConfig.to} className="neu-btn neu-btn-primary" style={{ width: '100%' }} onClick={() => setMobileOpen(false)}>
+                {ctaConfig.label}
               </Link>
             </div>
           </div>

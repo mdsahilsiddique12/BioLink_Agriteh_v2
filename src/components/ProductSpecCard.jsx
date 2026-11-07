@@ -1,83 +1,92 @@
 import { useState } from 'react';
-import { ShieldCheck, FileText, CheckCircle2, Package, ArrowRight, ExternalLink, Sparkles } from 'lucide-react';
+import { ShieldCheck, FileText, CheckCircle2, Package, ArrowRight, Sparkles } from 'lucide-react';
 import './ProductSpecCard.css';
 
-export default function ProductSpecCard({ product, sector = 'manure', onSelectSample }) {
-  const [showSpecsModal, setShowSpecsModal] = useState(false);
+export default function ProductSpecCard({ product, sector = 'manure' }) {
+  // Sector-specific request route
+  const getRequestLink = () => {
+    if (sector === 'feed') {
+      return `/institutional?sector=feed&product=${encodeURIComponent(product.id)}`;
+    }
+    if (sector === 'seabuckthorn') {
+      return `/contact?sector=seabuckthorn&product=${encodeURIComponent(product.id)}`;
+    }
+    return `/sample`;
+  };
+
+  const getRequestText = () => {
+    if (sector === 'feed') return 'Request Mill Allocation';
+    if (sector === 'seabuckthorn') return 'Request Pilot Pack (5L/10kg)';
+    return 'Order Sample (20/30/50kg)';
+  };
 
   return (
-    <div className="product-spec-card glass-card">
-      {/* Header Badge */}
-      <div className="product-spec-header">
-        <span className={`spec-badge spec-badge--${product.badgeType || 'green'}`}>
+    <div className="neu-spec-card neu-card">
+      {/* Top Header Badge Row */}
+      <div className="spec-card-top">
+        <span className="spec-badge-pill">
           {product.badge || 'Verified Standard'}
         </span>
         {product.npk && (
-          <span className="spec-metric-tag">{product.npk}</span>
+          <span className="spec-npk-tag">{product.npk}</span>
         )}
       </div>
 
       {/* Title & Tagline */}
-      <h3 className="product-spec-title">{product.name}</h3>
-      <p className="product-spec-tagline">{product.tagline || product.description}</p>
+      <div className="spec-title-area">
+        <h3 className="spec-card-title">{product.name}</h3>
+        <p className="spec-card-sub">{product.tagline || product.description}</p>
+      </div>
 
-      {/* Structural Data Sheet (Crisp Low-Border Key-Value Grid) */}
-      <div className="product-datasheet-grid">
+      {/* Structural Neumorphic Key-Value Inset Datasheet */}
+      <div className="spec-datasheet-inset neu-inset">
         {product.specs ? (
           Object.entries(product.specs).slice(0, 4).map(([key, val]) => (
-            <div key={key} className="datasheet-item">
-              <span className="datasheet-key">{key.replace(/([A-Z])/g, ' $1').toUpperCase()}</span>
-              <span className="datasheet-val">{val}</span>
+            <div key={key} className="spec-stat-cell">
+              <span className="stat-key">{key.replace(/([A-Z])/g, ' $1').toUpperCase()}</span>
+              <span className="stat-val">{val}</span>
             </div>
           ))
         ) : (
           <>
-            <div className="datasheet-item">
-              <span className="datasheet-key">ORGANIC CARBON</span>
-              <span className="datasheet-val">&gt; 16.0% Minimum</span>
+            <div className="spec-stat-cell">
+              <span className="stat-key">ORGANIC CARBON</span>
+              <span className="stat-val">&gt; 16.0% Minimum</span>
             </div>
-            <div className="datasheet-item">
-              <span className="datasheet-key">MOISTURE CONTENT</span>
-              <span className="datasheet-val">&lt; 30.0% Max Cap</span>
+            <div className="spec-stat-cell">
+              <span className="stat-key">MOISTURE CAP</span>
+              <span className="stat-val">&lt; 30.0% Hard Limit</span>
             </div>
-            <div className="datasheet-item">
-              <span className="datasheet-key">C:N RATIO</span>
-              <span className="datasheet-val">&lt; 20:1 Ideal</span>
+            <div className="spec-stat-cell">
+              <span className="stat-key">C:N RATIO</span>
+              <span className="stat-val">&lt; 20:1 Ideal</span>
             </div>
-            <div className="datasheet-item">
-              <span className="datasheet-key">STERILIZATION</span>
-              <span className="datasheet-val">Thermophilic Heat Screened</span>
+            <div className="spec-stat-cell">
+              <span className="stat-key">HEAVY METALS</span>
+              <span className="stat-val">Negative (NABL Tested)</span>
             </div>
           </>
         )}
       </div>
 
-      {/* Key Features List */}
-      <div className="spec-features-list">
+      {/* Features Bullet List */}
+      <div className="spec-bullets-list">
         {(product.features || product.applications || ['Lab Certified', 'Zero Pathogens', 'Direct Dispatch']).slice(0, 3).map((feat, idx) => (
-          <div key={idx} className="spec-feature-bullet">
+          <div key={idx} className="spec-bullet-row">
             <CheckCircle2 size={14} className="text-accent" />
             <span>{feat}</span>
           </div>
         ))}
       </div>
 
-      {/* Card Action Footer */}
-      <div className="product-spec-footer">
-        <div className="spec-footer-actions">
-          <a
-            href={sector === 'feed' ? '/contact?product=' + encodeURIComponent(product.id) : '/sample'}
-            className="btn btn-primary btn-sm"
-          >
-            <Package size={14} /> Request Allocation / Sample
-          </a>
-          <a
-            href="/lab-reports"
-            className="btn btn-outline btn-sm spec-coa-btn"
-          >
-            <FileText size={14} /> View COA
-          </a>
-        </div>
+      {/* Action Footer */}
+      <div className="spec-card-footer">
+        <a href={getRequestLink()} className="neu-btn neu-btn-primary spec-action-btn">
+          <Package size={14} /> {getRequestText()}
+        </a>
+        <a href="/lab-reports" className="neu-btn neu-btn-glass spec-coa-btn" title="View Certificate of Analysis">
+          <FileText size={14} />
+        </a>
       </div>
     </div>
   );

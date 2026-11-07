@@ -4,15 +4,14 @@ import {
   ArrowRight, Truck, Factory, Clock, Shield, Star, ChevronRight, 
   Leaf, Droplets, Beaker, Package, Zap, Globe, ExternalLink, 
   Handshake, Award, Sparkles, CheckCircle2, ChevronDown, Mountain, 
-  Sun, Layers, Droplet, Wheat, FileText, Check, ShieldCheck, Scale
+  Sun, Layers, Droplet, Wheat, FileText, Check, ShieldCheck, Scale, MapPin
 } from 'lucide-react';
 import ParticleField from '../components/ParticleField';
-import SeaBuckthornModal from '../components/SeaBuckthornModal';
 import TonnageSlider from '../components/TonnageSlider';
 import ProductSpecCard from '../components/ProductSpecCard';
 import { useSubdomain } from '../context/SubdomainContext';
 import { useScrollReveal, useCountUp } from '../hooks/useAnimations';
-import { testimonials, stats, certifications, supplyHubs } from '../data/testimonials';
+import { supplyHubs } from '../data/testimonials';
 import { products } from '../data/products';
 import { feedProducts } from '../data/feedProducts';
 import { seaBuckthornProducts } from '../data/seaBuckthornProducts';
@@ -20,21 +19,17 @@ import './HomePage.css';
 
 const iconMap = { Truck, Factory, Clock, Shield };
 
-function StatCard({ stat, index }) {
-  const { containerRef, countRef } = useCountUp(stat.value, 2000);
-  const Icon = iconMap[stat.icon] || Shield;
+function NeuStatCard({ value, label, prefix = '', suffix = '', index }) {
+  const { containerRef, countRef } = useCountUp(value, 2000);
 
   return (
-    <div className="stat-card reveal" ref={containerRef} style={{ transitionDelay: `${index * 120}ms` }}>
-      <div className="stat-card__icon">
-        <Icon size={22} />
-      </div>
-      <div className="stat-card__value">
-        {stat.prefix && <span>{stat.prefix}</span>}
+    <div className="neu-stat-tile neu-card" ref={containerRef} style={{ transitionDelay: `${index * 100}ms` }}>
+      <div className="neu-stat-val">
+        {prefix && <span>{prefix}</span>}
         <span ref={countRef}>0</span>
-        {stat.suffix && <span>{stat.suffix}</span>}
+        {suffix && <span>{suffix}</span>}
       </div>
-      <p className="stat-card__label">{stat.label}</p>
+      <p className="neu-stat-label">{label}</p>
     </div>
   );
 }
@@ -43,538 +38,608 @@ export default function HomePage() {
   const { tenant, switchTenant } = useSubdomain();
   const revealRef = useScrollReveal();
   const tickerRef = useRef(null);
-  const [isSampleDropdownOpen, setIsSampleDropdownOpen] = useState(false);
-  const [isSbtModalOpen, setIsSbtModalOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsSampleDropdownOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const heroData = tenant.hero || {};
 
-  return (
-    <main className="home" ref={revealRef}>
-      {/* ═══ SEA BUCKTHORN MODAL ═══ */}
-      <SeaBuckthornModal isOpen={isSbtModalOpen} onClose={() => setIsSbtModalOpen(false)} />
+  // ════════════════════════════════════════════════════════════
+  // 1. ORGANIC MANURE ISOLATED VIEW
+  // ════════════════════════════════════════════════════════════
+  if (tenant.id === 'manure') {
+    return (
+      <main className="home-neu-main" ref={revealRef}>
+        {/* Manure Hero */}
+        <section className="neu-hero" id="hero-section">
+          <ParticleField count={45} color="#059669" />
+          <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(5, 150, 105, 0.18), transparent 70%)' }} />
 
-      {/* ═══ B2B HIGH-IMPACT HERO SECTION ═══ */}
-      <section className="hero" id="hero-section">
-        <ParticleField count={70} />
-
-        {/* Ambient Glow Orbs tailored to active theme */}
-        <div className="orb orb-green" style={{ width: 450, height: 450, top: '-12%', right: '-5%' }} />
-        <div className="orb orb-cyan" style={{ width: 350, height: 350, bottom: '5%', left: '-8%' }} />
-
-        {/* Precision HUD Corner Brackets */}
-        <div className="hero__hud-corner hero__hud-corner--tl" />
-        <div className="hero__hud-corner hero__hud-corner--tr" />
-        <div className="hero__hud-corner hero__hud-corner--bl" />
-        <div className="hero__hud-corner hero__hud-corner--br" />
-
-        <div className="hero__content container">
-          {/* Eyebrow / Badges */}
-          <div className="hero__badge-row">
-            <div className="hero__badge badge" id="satat-badge">
-              <Globe size={13} style={{ color: 'var(--neon-cyan)', marginRight: '6px' }} /> 
-              {heroData.eyebrow || 'Verified SATAT Plant Partner (Govt of India Initiative)'}
-            </div>
-            {tenant.id !== 'seabuckthorn' && (
-              <button
-                onClick={() => switchTenant('seabuckthorn')}
-                className="hero__badge badge badge--sbt-highlight"
-                id="sbt-badge-hero"
-              >
-                <Sparkles size={13} style={{ marginRight: '6px' }} /> 
-                NEW: Himalayan Sea Buckthorn B2B Sourcing →
-              </button>
-            )}
-          </div>
-
-          {/* Dynamic Sleek Hero Typography */}
-          <h1 className="hero__title">
-            <span className="hero__title-line">{heroData.titleLine1 || '100% Heat-Sterilized Bulk Supplies.'}</span>
-            <span className="hero__title-line text-glow-hero">{heroData.titleHighlight || '72-Hour Gate Escrow Dispatch.'}</span>
-          </h1>
-
-          <p className="hero__subtitle">
-            {heroData.subtitle || 'Direct factory gate allotments from certified Compressed Biogas (CBG) facilities and industrial processors. Zero logistics hassle. 100% traceable supply chains.'}
-          </p>
-
-          {/* Hero CTAs */}
-          <div className="hero__actions">
-            <div className="sample-dropdown-container" ref={dropdownRef}>
-              <button
-                className="btn btn-primary btn-lg"
-                id="hero-cta-sample-dropdown"
-                onClick={() => setIsSampleDropdownOpen(!isSampleDropdownOpen)}
-              >
-                <Package size={18} />
-                <span>Order Trial / Sample</span>
-                <ChevronDown size={16} className={`dropdown-chevron ${isSampleDropdownOpen ? 'rotated' : ''}`} />
-              </button>
-
-              {isSampleDropdownOpen && (
-                <div className="sample-dropdown-menu glass-card">
-                  <Link to="/sample" className="sample-dropdown-item" onClick={() => setIsSampleDropdownOpen(false)}>
-                    <div className="sample-dropdown-icon" style={{ background: '#ecfdf5', color: '#059669' }}>
-                      <Leaf size={18} />
-                    </div>
-                    <div>
-                      <span className="sample-dropdown-title">Fermented Organic Manure (FOM)</span>
-                      <span className="sample-dropdown-sub">20kg / 30kg / 50kg Lab Tested Bags</span>
-                    </div>
-                  </Link>
-
-                  <button
-                    className="sample-dropdown-item sample-dropdown-item--feed"
-                    onClick={() => {
-                      setIsSampleDropdownOpen(false);
-                      switchTenant('feed');
-                    }}
-                  >
-                    <div className="sample-dropdown-icon" style={{ background: '#fffbeb', color: '#d97706' }}>
-                      <Wheat size={18} />
-                    </div>
-                    <div>
-                      <span className="sample-dropdown-title" style={{ color: '#d97706' }}>Industrial DDGS &amp; Molasses</span>
-                      <span className="sample-dropdown-sub">High-Protein Feedstock Specifications</span>
-                    </div>
-                  </button>
-
-                  <button
-                    className="sample-dropdown-item sample-dropdown-item--sbt"
-                    onClick={() => {
-                      setIsSampleDropdownOpen(false);
-                      setIsSbtModalOpen(true);
-                    }}
-                  >
-                    <div className="sample-dropdown-icon" style={{ background: '#fff7ed', color: '#ea580c' }}>
-                      <Sparkles size={18} />
-                    </div>
-                    <div>
-                      <span className="sample-dropdown-title" style={{ color: '#ea580c' }}>Himalayan Sea Buckthorn Extracts</span>
-                      <span className="sample-dropdown-sub">CO₂ Seed Oil, Pulp Oil &amp; Soluble Powder</span>
-                    </div>
-                  </button>
-                </div>
-              )}
+          <div className="container neu-hero-content">
+            <div className="neu-pill" style={{ marginBottom: '1.2rem' }}>
+              <Leaf size={14} /> FCO 1985 Standard Compliant &bull; Govt. Verified SATAT Plant Partner
             </div>
 
-            <Link to="/institutional" className="btn btn-outline btn-lg" id="hero-cta-quote">
-              Get Bulk Allocation Quote <ArrowRight size={16} />
-            </Link>
-          </div>
+            <h1 className="neu-hero-title">
+              <span>Bulk Fermented Organic Manure.</span>
+              <span className="text-gradient">72-Hour Gate Escrow Dispatches.</span>
+            </h1>
 
-          {/* Dynamic 4-Point Data Strip */}
-          <div className="hero__data-strip">
-            <div className="hero__data-item">
-              <span className="hero__data-value">{heroData.stat1?.value || '1,200+'}</span>
-              <span className="hero__data-label">{heroData.stat1?.label || 'Tons Capacity'}</span>
-            </div>
-            <div className="hero__data-divider" />
-            <div className="hero__data-item">
-              <span className="hero__data-value">{heroData.stat2?.value || '72-Hr'}</span>
-              <span className="hero__data-label">{heroData.stat2?.label || 'Escrow QA Gate'}</span>
-            </div>
-            <div className="hero__data-divider" />
-            <div className="hero__data-item">
-              <span className="hero__data-value">{heroData.stat3?.value || '6 States'}</span>
-              <span className="hero__data-label">{heroData.stat3?.label || 'Corridor Network'}</span>
-            </div>
-            <div className="hero__data-divider" />
-            <div className="hero__data-item">
-              <span className="hero__data-value">{heroData.stat4?.value || '100%'}</span>
-              <span className="hero__data-label">{heroData.stat4?.label || 'Dharma Kanta Traceable'}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero__scanline" />
-      </section>
-
-      {/* ═══ LIVE PAN-INDIA SUPPLY TICKER ═══ */}
-      <section className="ticker-section" id="supply-ticker">
-        <div className="ticker-section__glow" />
-        <div className="ticker-track" ref={tickerRef}>
-          <div className="ticker-content">
-            {[...supplyHubs, ...supplyHubs].map((hub, i) => (
-              <div key={i} className="ticker-item">
-                <span className={`ticker-dot ${hub.status === 'active' ? 'ticker-dot--active' : 'ticker-dot--limited'}`} />
-                <span className="ticker-state">{hub.state} Corridor</span>
-                <span className="ticker-tons">{hub.tons} MT Ready For Allocation</span>
-                <span className="ticker-coord">{hub.lat}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ INTERACTIVE TONNAGE SLIDER SECTION ═══ */}
-      <section className="section tonnage-interactive-section" id="tonnage-calculator">
-        <div className="container">
-          <TonnageSlider sector={tenant.id} defaultTonnage={tenant.id === 'feed' ? 30 : 25} />
-        </div>
-      </section>
-
-      {/* ═══ DEDICATED SECTOR HIGHLIGHT CARDS (3 SPACES) ═══ */}
-      <section className="section sector-spaces-section" id="sectors-overview">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label">Enterprise Multi-Sector Portfolio</span>
-            <h2 className="section-title text-glow">Three Dedicated Industrial Spaces</h2>
-            <p className="section-subtitle">
-              Engineered as independent multi-tonne spaces to eliminate branding clutter and deliver precision specifications for your commercial vertical.
+            <p className="neu-hero-sub">
+              Direct factory gate allotments from certified Compressed Biogas (CBG) facilities across India. Guaranteed moisture &lt; 30%, organic carbon &gt; 16%, and strict zero heavy-metal certification.
             </p>
-          </div>
 
-          <div className="sector-spaces-grid">
-            {/* Sector 1: Organic Manure Space */}
-            <div className={`sector-space-card glass-card ${tenant.id === 'manure' ? 'sector-space-card--active' : ''}`}>
-              <div className="sector-space-header" style={{ borderColor: 'rgba(5, 150, 105, 0.3)' }}>
-                <div className="sector-space-icon" style={{ background: '#ecfdf5', color: '#059669' }}>
-                  <Leaf size={24} />
-                </div>
-                <div>
-                  <span className="sector-subdomain-tag">manure.biolinkagri.in</span>
-                  <h3 className="sector-space-title">Organic Manure Space</h3>
-                </div>
-              </div>
-              <p className="sector-space-desc">
-                Government-certified Fermented Organic Manure (FOM) and concentrated bio-slurry from SATAT CBG plants. FCO 1985 tested with strict moisture &lt; 30%.
-              </p>
-              <ul className="sector-feature-bullets">
-                <li><Check size={14} className="text-accent" /> Granulated &amp; Powdered FOM</li>
-                <li><Check size={14} className="text-accent" /> High Organic Carbon (&gt; 16%)</li>
-                <li><Check size={14} className="text-accent" /> 15-500 MT Direct Multi-Axle Dispatch</li>
-              </ul>
-              <div className="sector-space-footer">
-                <button
-                  onClick={() => switchTenant('manure')}
-                  className="btn btn-outline btn-sm"
-                  style={{ width: '100%' }}
-                >
-                  Enter Manure Portal <ArrowRight size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* Sector 2: Industrial Feed Space (DDGS & Molasses) */}
-            <div className={`sector-space-card glass-card ${tenant.id === 'feed' ? 'sector-space-card--active' : ''}`}>
-              <div className="sector-space-header" style={{ borderColor: 'rgba(217, 119, 6, 0.3)' }}>
-                <div className="sector-space-icon" style={{ background: '#fffbeb', color: '#d97706' }}>
-                  <Wheat size={24} />
-                </div>
-                <div>
-                  <span className="sector-subdomain-tag">feed.biolinkagri.in</span>
-                  <h3 className="sector-space-title">Industrial Feed Space</h3>
-                </div>
-              </div>
-              <p className="sector-space-desc">
-                Bulk Corn &amp; Rice DDGS and 80°+ Brix heavy cane molasses for commercial dairy integrators, poultry mills, and aquaculture plants across India.
-              </p>
-              <ul className="sector-feature-bullets">
-                <li><Check size={14} style={{ color: '#d97706' }} /> Corn DDGS (28-32% Crude Protein)</li>
-                <li><Check size={14} style={{ color: '#d97706' }} /> Rice DDGS (40-45% Crude Protein)</li>
-                <li><Check size={14} style={{ color: '#d97706' }} /> Heavy Mill Molasses (80°+ Brix Tankers)</li>
-              </ul>
-              <div className="sector-space-footer">
-                <button
-                  onClick={() => switchTenant('feed')}
-                  className="btn btn-outline btn-sm"
-                  style={{ width: '100%', borderColor: '#d97706', color: '#d97706' }}
-                >
-                  Enter Feed Portal <ArrowRight size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* Sector 3: Premium Botanicals Space (Sea Buckthorn) */}
-            <div className={`sector-space-card glass-card ${tenant.id === 'seabuckthorn' ? 'sector-space-card--active' : ''}`}>
-              <div className="sector-space-header" style={{ borderColor: 'rgba(234, 88, 12, 0.3)' }}>
-                <div className="sector-space-icon" style={{ background: '#fff7ed', color: '#ea580c' }}>
-                  <Mountain size={24} />
-                </div>
-                <div>
-                  <span className="sector-subdomain-tag">seabuckthorn.biolinkagri.in</span>
-                  <h3 className="sector-space-title">Premium Botanicals</h3>
-                </div>
-              </div>
-              <p className="sector-space-desc">
-                Himalayan wild-harvested Sea Buckthorn extracts from Leh-Ladakh clusters. Solvent-free Supercritical CO₂ seed oil, pulp oil, and 100% soluble freeze-dried powders.
-              </p>
-              <ul className="sector-feature-bullets">
-                <li><Check size={14} style={{ color: '#ea580c' }} /> &gt; 32% Rare Omega-7 (Palmitoleic)</li>
-                <li><Check size={14} style={{ color: '#ea580c' }} /> CO₂ Supercritical Seed Oil Purity</li>
-                <li><Check size={14} style={{ color: '#ea580c' }} /> Pilot Packs (5L / 10kg) Available</li>
-              </ul>
-              <div className="sector-space-footer">
-                <button
-                  onClick={() => switchTenant('seabuckthorn')}
-                  className="btn btn-outline btn-sm"
-                  style={{ width: '100%', borderColor: '#ea580c', color: '#ea580c' }}
-                >
-                  Enter Botanicals Portal <ArrowRight size={14} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ CURRENT SECTOR PRODUCT SPECIFICATION CARDS ═══ */}
-      <section className="section product-specs-section" id="product-specifications">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label">{tenant.name} Specifications</span>
-            <h2 className="section-title text-glow">Lab-Certified Commercial Formulations</h2>
-            <p className="section-subtitle">
-              Low-border glassmorphism technical sheets with laboratory NPK, protein, and purity benchmarks.
-            </p>
-          </div>
-
-          <div className="product-specs-grid">
-            {tenant.id === 'feed' ? (
-              feedProducts.map((p) => (
-                <ProductSpecCard key={p.id} product={p} sector="feed" />
-              ))
-            ) : tenant.id === 'seabuckthorn' ? (
-              seaBuckthornProducts.map((p) => (
-                <ProductSpecCard key={p.id} product={p} sector="seabuckthorn" />
-              ))
-            ) : (
-              products.map((p) => (
-                <ProductSpecCard key={p.id} product={p} sector="manure" />
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ NPK & MOISTURE LAB QUALITY CHECK HOOKS ═══ */}
-      <section className="section npk-hooks" id="npk-hooks">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label">Real-Time Quality Check</span>
-            <h2 className="section-title text-glow">NPK &amp; Moisture Lab Testing Protocols</h2>
-            <p className="section-subtitle">
-              Every batch undergoes strict moisture testing (&lt; 30%) and organic matter calibration at accredited GOBARdhan facility labs.
-            </p>
-          </div>
-
-          <div className="npk-grid">
-            <div className="npk-video glass-card reveal-left">
-              <div className="video-player-mock">
-                <div className="video-overlay">
-                  <div className="play-button-glow">
-                    <div className="play-button-inner">▶</div>
-                  </div>
-                  <span className="video-length">02:15 Min</span>
-                  <span className="video-title">CBG Plant Batch Analysis - Moisture Check (Target &lt; 30%)</span>
-                </div>
-                <div className="video-placeholder-bg" />
-              </div>
-            </div>
-
-            <div className="npk-details reveal-right">
-              <h3 className="npk-details__title">Radical Analytical Integrity</h3>
-              <p className="npk-details__text">
-                Every batch dispatched under the BioLink network includes an accredited Certificate of Analysis (COA) specifying nitrogen, organic carbon, moisture, and zero pathogen certification.
-              </p>
-
-              <ul className="npk-specs">
-                <li className="npk-spec-item">
-                  <span className="npk-spec-label">Total Nitrogen (N)</span>
-                  <span className="npk-spec-value">&gt; 1.5% - 2.2%</span>
-                </li>
-                <li className="npk-spec-item">
-                  <span className="npk-spec-label">Phosphorus (P2O5)</span>
-                  <span className="npk-spec-value">&gt; 1.0%</span>
-                </li>
-                <li className="npk-spec-item">
-                  <span className="npk-spec-label">Potassium (K2O)</span>
-                  <span className="npk-spec-value">&gt; 1.0%</span>
-                </li>
-                <li className="npk-spec-item">
-                  <span className="npk-spec-label">Moisture Content</span>
-                  <span className="npk-spec-value" style={{ color: 'var(--neon-cyan)', fontWeight: 'bold' }}>&lt; 30.0% Hard Cap</span>
-                </li>
-              </ul>
-
-              <Link to="/lab-reports" className="btn btn-outline" style={{ marginTop: 'var(--space-md)' }}>
-                <FileText size={16} /> Open NABL Certification Vault
+            <div className="neu-hero-actions">
+              <Link to="/sample" className="neu-btn neu-btn-primary neu-btn-lg">
+                <Package size={18} /> Order Lab Sample (20/30/50kg)
               </Link>
+              <a href="#tonnage-calculator" className="neu-btn neu-btn-glass neu-btn-lg">
+                Calculate Bulk Freight <ArrowRight size={16} />
+              </a>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ═══ STATS ═══ */}
-      <section className="section stats-section" id="stats-section">
-        <div className="container">
-          <div className="stats-grid stagger-children">
-            {stats.map((stat, i) => (
-              <StatCard key={stat.label} stat={stat} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ TRUST & CERTIFICATIONS ═══ */}
-      <section className="section trust-section" id="trust-section">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label">Verified Standards</span>
-            <h2 className="section-title text-glow">Regulatory Compliance &amp; Standards</h2>
-          </div>
-
-          <div className="cert-grid stagger-children">
-            {certifications.map((cert) => (
-              <div key={cert.name} className="cert-card glass-card reveal">
-                <Shield size={24} className="cert-card__icon" />
-                <h4 className="cert-card__name">{cert.name}</h4>
-                <p className="cert-card__desc">{cert.description}</p>
+            {/* Manure Stat Strip */}
+            <div className="neu-stat-strip neu-card">
+              <div className="neu-stat-cell">
+                <span className="stat-number">&lt; 30.0%</span>
+                <span className="stat-tag">Moisture Cap (Strict)</span>
               </div>
-            ))}
-          </div>
-
-          {/* Testimonials */}
-          <div className="testimonials reveal">
-            <div className="section-header" style={{ marginBottom: 'var(--space-xl)' }}>
-              <span className="section-label">Procurement Officers &amp; Planters</span>
-              <h2 className="section-title text-glow">Trusted Nationwide</h2>
+              <div className="neu-stat-cell">
+                <span className="stat-number">&gt; 16.0%</span>
+                <span className="stat-tag">Organic Carbon Ratio</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">15 - 500 MT</span>
+                <span className="stat-tag">Multi-Axle Truckloads</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">100%</span>
+                <span className="stat-tag">Weighbridge Escrow Protected</span>
+              </div>
             </div>
-            <div className="testimonial-grid stagger-children">
-              {testimonials.slice(0, 3).map((t) => (
-                <div key={t.id} className="testimonial-card glass-card reveal">
-                  <div className="testimonial-card__stars">
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} size={14} fill="#fbbf24" color="#fbbf24" />
-                    ))}
-                  </div>
-                  <p className="testimonial-card__text">"{t.text}"</p>
-                  <div className="testimonial-card__author">
-                    <div className="testimonial-card__avatar">{t.name.charAt(0)}</div>
-                    <div>
-                      <h4 className="testimonial-card__name">{t.name}</h4>
-                      <p className="testimonial-card__role">{t.role}</p>
-                    </div>
-                  </div>
-                  <span className="badge badge-cyan">{t.tons}</span>
+          </div>
+        </section>
+
+        {/* Live Corridor Ticker */}
+        <div className="neu-ticker-bar">
+          <div className="ticker-track" ref={tickerRef}>
+            <div className="ticker-content">
+              {[...supplyHubs, ...supplyHubs].map((hub, i) => (
+                <div key={i} className="neu-ticker-pill">
+                  <span className="pulse-dot-green" />
+                  <strong>{hub.state} CBG Corridor:</strong>
+                  <span>{hub.tons} MT Ready For Allocation</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ═══ STRATEGIC PARTNERS MARQUEE ═══ */}
-      <section className="partners-circle-section" id="partners-section">
-        <div className="partners-circle-header">
-          <span className="partners-circle-label">
-            <Handshake size={14} /> Strategic Agro-Industrial Ecosystem
-          </span>
-          <h2 className="partners-circle-title">Connected Industry Leaders</h2>
-          <p className="partners-circle-subtitle">
-            Partnered with India's premier agritech networks, distillery co-product processors, and clean energy initiatives.
-          </p>
+        {/* Manure Interactive Tonnage Calculator */}
+        <section className="section" id="tonnage-calculator">
+          <div className="container">
+            <TonnageSlider sector="manure" defaultTonnage={25} />
+          </div>
+        </section>
+
+        {/* Manure Product Specifications */}
+        <section className="section" id="product-specifications">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-label">Fermented Organic Inputs</span>
+              <h2 className="section-title">FCO 1985 Certified Organic Formulations</h2>
+              <p className="section-subtitle">
+                Thermophilically digested and deodorized bulk organic inputs sourced directly from operational CBG facilities.
+              </p>
+            </div>
+
+            <div className="product-specs-grid">
+              {products.map((p) => (
+                <ProductSpecCard key={p.id} product={p} sector="manure" />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Manure Quality Lab Testing Protocol */}
+        <section className="section" id="quality-lab-protocol">
+          <div className="container">
+            <div className="neu-lab-box neu-card">
+              <div className="lab-box-grid">
+                <div>
+                  <span className="section-label">NABL Quality Protocol</span>
+                  <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>Rigorous Moisture &amp; NPK Calibration</h3>
+                  <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
+                    Every batch of Fermented Organic Manure is mechanically screened, de-stoned, and tested for primary nutrients (NPK), organic carbon content, and heavy metal compliance before weighbridge dispatch.
+                  </p>
+                  <div className="lab-check-bullets">
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Total Nitrogen (N): &gt; 1.5% - 2.2%</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Available Phosphorus (P2O5): &gt; 1.0%</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Water Soluble Potassium (K2O): &gt; 1.0%</div>
+                    <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Maximum Moisture Content: &lt; 30.0% (Hard Target)</div>
+                  </div>
+                  <Link to="/lab-reports" className="neu-btn neu-btn-primary" style={{ marginTop: '1.5rem' }}>
+                    <FileText size={16} /> View NABL Accredited COA Reports
+                  </Link>
+                </div>
+                <div className="lab-certificate-preview neu-inset">
+                  <div className="cert-pill">
+                    <ShieldCheck size={28} className="text-accent" />
+                    <strong>FCO Schedule IV Compliance Guaranteed</strong>
+                    <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Certified zero viable weed seeds, zero pathogenic E. coli or Salmonella.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 2. INDUSTRIAL FEED ISOLATED VIEW (DDGS & MOLASSES)
+  // ════════════════════════════════════════════════════════════
+  if (tenant.id === 'feed') {
+    return (
+      <main className="home-neu-main" ref={revealRef}>
+        {/* Feed Hero */}
+        <section className="neu-hero" id="hero-section">
+          <ParticleField count={45} color="#d97706" />
+          <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(217, 119, 6, 0.18), transparent 70%)' }} />
+
+          <div className="container neu-hero-content">
+            <div className="neu-pill" style={{ marginBottom: '1.2rem', color: '#d97706', borderColor: 'rgba(217, 119, 6, 0.3)' }}>
+              <Wheat size={14} /> Grain Distillery Byproduct Allotment &bull; High Protein Nutrition
+            </div>
+
+            <h1 className="neu-hero-title">
+              <span>Bulk Corn &amp; Rice DDGS.</span>
+              <span className="text-gradient">Heavy Molasses Tanker Logistics.</span>
+            </h1>
+
+            <p className="neu-hero-sub">
+              High-protein grain byproducts (28%-45% crude protein) and 80°+ Brix heavy cane molasses dispatched directly from premier grain &amp; sugar distilleries for dairy herds, poultry integrators, and aquafeed mills nationwide.
+            </p>
+
+            <div className="neu-hero-actions">
+              <Link to="/institutional?sector=feed" className="neu-btn neu-btn-primary neu-btn-lg">
+                <Wheat size={18} /> Request Bulk Feed Contract
+              </Link>
+              <a href="#tonnage-calculator" className="neu-btn neu-btn-glass neu-btn-lg">
+                Calculate Tonnage &amp; Freight <ArrowRight size={16} />
+              </a>
+            </div>
+
+            {/* Feed Stat Strip */}
+            <div className="neu-stat-strip neu-card">
+              <div className="neu-stat-cell">
+                <span className="stat-number">28 - 45%</span>
+                <span className="stat-tag">Crude Protein (Dry Basis)</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">&gt; 80.0°</span>
+                <span className="stat-tag">Brix Heavy Molasses</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">&lt; 10.0%</span>
+                <span className="stat-tag">Controlled Moisture</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">24 - 48h</span>
+                <span className="stat-tag">Direct Mill Clearance</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Live Feed Dispatch Corridors */}
+        <div className="neu-ticker-bar">
+          <div className="ticker-track" ref={tickerRef}>
+            <div className="ticker-content">
+              {[
+                { mill: 'Bihar Grain Distillery Hub', stock: 'Corn DDGS: 450 MT Available' },
+                { mill: 'UP Sugarcane Belt Hub', stock: 'Heavy Cane Molasses: 600 MT Active Tankers' },
+                { mill: 'Bengal Feed Logistics Corridor', stock: 'Rice DDGS 42% Protein: 350 MT' },
+                { mill: 'Assam / Brahmaputra Feed Node', stock: 'Daily Rail & Multi-Axle Dispatches' },
+              ].concat([
+                { mill: 'Bihar Grain Distillery Hub', stock: 'Corn DDGS: 450 MT Available' },
+                { mill: 'UP Sugarcane Belt Hub', stock: 'Heavy Cane Molasses: 600 MT Active Tankers' },
+              ]).map((node, i) => (
+                <div key={i} className="neu-ticker-pill" style={{ borderColor: 'rgba(217, 119, 6, 0.3)' }}>
+                  <span className="pulse-dot-amber" />
+                  <strong>{node.mill}:</strong>
+                  <span>{node.stock}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="partners-circle-container">
-          <div className="partners-circle-track">
-            {[1, 2, 3].flatMap(() => [
-              {
-                id: 'krishakjan',
-                name: 'KrishakJan',
-                subtitle: 'Strategic Input & Farmer Network',
-                logoImg: '/krishakjan-logo.png',
-                url: 'https://krishakjan.com/',
-              },
-              {
-                id: 'satat',
-                name: 'SATAT CBG Network',
-                subtitle: 'Govt. of India Clean Energy',
-                emblemClass: 'circle-logo-emblem--indigo',
-                logoText: 'SATAT\nCBG',
-                url: 'https://satat.co.in/',
-              },
-              {
-                id: 'biolink',
-                name: 'BioLink Agritech',
-                subtitle: 'Supply Chain & Lab Backbone',
-                emblemClass: 'circle-logo-emblem--green',
-                logoText: 'BioLink\nAgri',
-                url: 'https://biolinkagri.in/',
-              },
-              {
-                id: 'gobardhan',
-                name: 'GOBARdhan Initiative',
-                subtitle: 'Organic Inputs & Clean Energy',
-                emblemClass: 'circle-logo-emblem--gold',
-                logoText: 'GOBAR\ndhan',
-                url: 'https://gobardhan.co.in/',
-              },
-              {
-                id: 'nabard',
-                name: 'NABARD Farmers Club',
-                subtitle: 'Agri Development Network',
-                emblemClass: 'circle-logo-emblem--indigo',
-                logoText: 'NABARD\nClub',
-                url: 'https://www.nabard.org/',
-              },
-            ]).map((item, idx) => (
-              <div key={`${item.id}-${idx}`} className="circle-partner-item">
-                <div className="circle-logo-badge">
-                  {item.logoImg ? (
-                    <img src={item.logoImg} alt={item.name} className="circle-logo-img" />
-                  ) : (
-                    <div className={`circle-logo-emblem ${item.emblemClass}`}>
-                      {item.logoText.split('\n').map((line, i) => (
-                        <span key={i}>{line}</span>
-                      ))}
-                    </div>
-                  )}
+        {/* Feed Interactive Tonnage Calculator */}
+        <section className="section" id="tonnage-calculator">
+          <div className="container">
+            <TonnageSlider sector="feed" defaultTonnage={30} />
+          </div>
+        </section>
+
+        {/* Feed Product Specifications Grid */}
+        <section className="section" id="product-specifications">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-label">Industrial Animal Feedstock</span>
+              <h2 className="section-title">Crude Protein &amp; Brix Specifications</h2>
+              <p className="section-subtitle">
+                Distillery-direct quality parameters for commercial cattle feed manufacturers, poultry layer rations, and aquaculture feed pellets.
+              </p>
+            </div>
+
+            <div className="product-specs-grid">
+              {feedProducts.map((p) => (
+                <ProductSpecCard key={p.id} product={p} sector="feed" />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Feed Quality Lab Testing Protocol */}
+        <section className="section" id="feed-quality-protocol">
+          <div className="container">
+            <div className="neu-lab-box neu-card">
+              <div className="lab-box-grid">
+                <div>
+                  <span className="section-label" style={{ color: '#d97706' }}>Feed Safety &amp; Nutritional Lab Verification</span>
+                  <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>Kjeldahl Crude Protein &amp; Aflatoxin Testing</h3>
+                  <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
+                    Every consignment of Corn and Rice DDGS undergoes strict laboratory screening for moisture levels, fat content, and aflatoxin contamination (&lt; 20 ppb) to ensure zero toxicity for livestock and aquatic species.
+                  </p>
+                  <div className="lab-check-bullets">
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Corn DDGS Crude Protein: 28% - 32% Guaranteed</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Rice DDGS Crude Protein: 40% - 45% Guaranteed</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Total Sugar Invert (Heavy Molasses): 46% - 50%</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#d97706' }} /> Aflatoxin B1/B2/G1/G2: Screened &lt; 20 ppb Safe Level</div>
+                  </div>
+                  <Link to="/contact?sector=feed" className="neu-btn neu-btn-primary" style={{ marginTop: '1.5rem', background: 'linear-gradient(135deg, #78350f, #d97706)' }}>
+                    <Wheat size={16} /> Request Distillery Mill Proforma
+                  </Link>
                 </div>
-                <h4 className="circle-partner-name">{item.name}</h4>
-                {item.url ? (
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="circle-partner-link">
-                    <span>Visit Website</span>
-                    <ExternalLink size={12} />
-                  </a>
-                ) : (
-                  <span className="circle-partner-sub">{item.subtitle}</span>
-                )}
+                <div className="lab-certificate-preview neu-inset">
+                  <div className="cert-pill">
+                    <ShieldCheck size={28} style={{ color: '#d97706' }} />
+                    <strong>Certified Feed Safety &amp; High Digestibility</strong>
+                    <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Complete Certificate of Analysis (COA) issued with weighbridge tare slip on loading.
+                    </p>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 3. SEA BUCKTHORN ISOLATED VIEW (HIMALAYAN BOTANICALS)
+  // ════════════════════════════════════════════════════════════
+  if (tenant.id === 'seabuckthorn') {
+    return (
+      <main className="home-neu-main" ref={revealRef}>
+        {/* Sea Buckthorn Hero */}
+        <section className="neu-hero" id="hero-section">
+          <ParticleField count={45} color="#ea580c" />
+          <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(234, 88, 12, 0.18), transparent 70%)' }} />
+
+          <div className="container neu-hero-content">
+            <div className="neu-pill" style={{ marginBottom: '1.2rem', color: '#ea580c', borderColor: 'rgba(234, 88, 12, 0.3)' }}>
+              <Mountain size={14} /> High-Altitude Leh-Ladakh &bull; Wild Superfruit Extraction
+            </div>
+
+            <h1 className="neu-hero-title">
+              <span>Pure Supercritical CO₂ Sea Buckthorn.</span>
+              <span className="text-gradient">Rare Omega-7 For Clinical Formulations.</span>
+            </h1>
+
+            <p className="neu-hero-sub">
+              Wild-harvested from 11,000+ ft Himalayan valleys. Pure supercritical CO₂ seed oil, deep ruby pulp oil with &gt; 32% natural Palmitoleic acid, and cryogenically freeze-dried soluble fruit powders for cosmetics and wellness brands.
+            </p>
+
+            <div className="neu-hero-actions">
+              <Link to="/contact?sector=seabuckthorn" className="neu-btn neu-btn-primary neu-btn-lg" style={{ background: 'linear-gradient(135deg, #1e293b, #ea580c)' }}>
+                <Sparkles size={18} /> Request Advance Lab Sample
+              </Link>
+              <a href="#product-specifications" className="neu-btn neu-btn-glass neu-btn-lg">
+                Explore Botanical Specs <ArrowRight size={16} />
+              </a>
+            </div>
+
+            {/* Sea Buckthorn Stat Strip */}
+            <div className="neu-stat-strip neu-card">
+              <div className="neu-stat-cell">
+                <span className="stat-number">&gt; 32.0%</span>
+                <span className="stat-tag">Omega-7 (Palmitoleic)</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">100%</span>
+                <span className="stat-tag">Supercritical CO₂ Purity</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">11,000 ft</span>
+                <span className="stat-tag">Wild Himalayan Origin</span>
+              </div>
+              <div className="neu-stat-cell">
+                <span className="stat-number">NABL Lab</span>
+                <span className="stat-tag">Heavy Metal Screened</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Supercritical Active Extract Highlights */}
+        <section className="section" id="botanical-highlights">
+          <div className="container">
+            <div className="omega-highlight-grid">
+              <div className="omega-card neu-card">
+                <div className="omega-icon" style={{ background: '#fff7ed', color: '#ea580c' }}>
+                  <Droplet size={24} />
+                </div>
+                <h4>Supercritical CO₂ Seed Oil</h4>
+                <p>Pure solvent-free golden oil. Exceptional 1:1 balanced ratio of Omega-3 (Alpha-Linolenic) &amp; Omega-6 (Linoleic) for anti-aging skincare.</p>
+              </div>
+
+              <div className="omega-card neu-card">
+                <div className="omega-icon" style={{ background: '#fff7ed', color: '#ea580c' }}>
+                  <Sun size={24} />
+                </div>
+                <h4>Ruby Mesocarp Pulp Oil</h4>
+                <p>Intense crimson-amber oil packing the world's richest natural source of Palmitoleic Acid (&gt; 32% Omega-7) for epithelial mucosal repair.</p>
+              </div>
+
+              <div className="omega-card neu-card">
+                <div className="omega-icon" style={{ background: '#fff7ed', color: '#ea580c' }}>
+                  <Layers size={24} />
+                </div>
+                <h4>Freeze-Dried Berry Powder</h4>
+                <p>100% water-dispersible whole fruit powder retaining natural Vitamin C (&gt; 800mg/100g) and polyphenols for modern nutraceutical blends.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sea Buckthorn Product Specifications Grid */}
+        <section className="section" id="product-specifications">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-label" style={{ color: '#ea580c' }}>Himalayan Active Formulations</span>
+              <h2 className="section-title">NABL-Tested Botanical Technical Sheets</h2>
+              <p className="section-subtitle">
+                GC-MS verified fatty acid profiles, peroxide value standards, and heavy metal screening for clinical cosmetics &amp; nutraceuticals.
+              </p>
+            </div>
+
+            <div className="product-specs-grid">
+              {seaBuckthornProducts.map((p) => (
+                <ProductSpecCard key={p.id} product={p} sector="seabuckthorn" />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Sea Buckthorn GC-MS Lab Integrity Protocol */}
+        <section className="section" id="botanical-lab-protocol">
+          <div className="container">
+            <div className="neu-lab-box neu-card">
+              <div className="lab-box-grid">
+                <div>
+                  <span className="section-label" style={{ color: '#ea580c' }}>Accredited Analytical Chromatography</span>
+                  <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>GC-MS Fatty Acid Profile &amp; Solvent Purity</h3>
+                  <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
+                    Unlike traditional hexane or chemical-solvent extracted oils, BioLink Himalayan Sea Buckthorn extracts are produced via cryogenic Supercritical Fluid CO₂ Extraction @ 35°C, ensuring 100% solvent-free purity and zero thermal degradation.
+                  </p>
+                  <div className="lab-check-bullets">
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Omega-7 Palmitoleic Acid: &gt; 32% in Pulp Oil</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Heavy Metals (Lead, Arsenic, Cadmium, Mercury): Negative (NABL)</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Residual Solvents: 0.0 ppm (100% Supercritical Fluid Extraction)</div>
+                    <div className="check-item"><CheckCircle2 size={16} style={{ color: '#ea580c' }} /> Natural Vitamin E (Tocopherols): &gt; 220 mg / 100g</div>
+                  </div>
+                  <Link to="/contact?sector=seabuckthorn" className="neu-btn neu-btn-primary" style={{ marginTop: '1.5rem', background: 'linear-gradient(135deg, #1e293b, #ea580c)' }}>
+                    <Sparkles size={16} /> Request Botanical COA &amp; Pilot Pack
+                  </Link>
+                </div>
+                <div className="lab-certificate-preview neu-inset">
+                  <div className="cert-pill">
+                    <ShieldCheck size={28} style={{ color: '#ea580c' }} />
+                    <strong>100% Wild Himalayan Leh-Ladakh Origin</strong>
+                    <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Cold-chain preserved batches with full traceability to altitude harvest clusters.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  // ════════════════════════════════════════════════════════════
+  // 4. CORPORATE GATEWAY VIEW (biolinkagri.in)
+  // ════════════════════════════════════════════════════════════
+  return (
+    <main className="home-neu-main" ref={revealRef}>
+      {/* Corporate Hero */}
+      <section className="neu-hero" id="hero-section">
+        <ParticleField count={45} color="#2563eb" />
+        <div className="neu-hero-glow" style={{ background: 'radial-gradient(circle, rgba(37, 99, 235, 0.15), transparent 70%)' }} />
+
+        <div className="container neu-hero-content">
+          <div className="neu-pill" style={{ marginBottom: '1.2rem' }}>
+            <Globe size={14} /> India’s Precision Agricultural Infrastructure &amp; Supply Chain Corridor
+          </div>
+
+          <h1 className="neu-hero-title">
+            <span>Enterprise Agricultural Sourcing.</span>
+            <span className="text-gradient">Three Dedicated Industrial Sectors.</span>
+          </h1>
+
+          <p className="neu-hero-sub">
+            Operating as an asset-light technology platform matching government-verified Compressed Biogas (CBG) organic manure plants, grain distillery DDGS mills, and high-altitude Himalayan botanical clusters with commercial enterprises.
+          </p>
+
+          <div className="neu-hero-actions">
+            <Link to="/institutional" className="neu-btn neu-btn-primary neu-btn-lg">
+              Get Consolidated Quote <ArrowRight size={16} />
+            </Link>
+            <Link to="/about" className="neu-btn neu-btn-glass neu-btn-lg">
+              Corporate Governance
+            </Link>
+          </div>
+
+          {/* Corporate Stat Strip */}
+          <div className="neu-stat-strip neu-card">
+            <div className="neu-stat-cell">
+              <span className="stat-number">1,200+</span>
+              <span className="stat-tag">Monthly MT Dispatched</span>
+            </div>
+            <div className="neu-stat-cell">
+              <span className="stat-number">72-Hour</span>
+              <span className="stat-tag">Gate Escrow Clearance</span>
+            </div>
+            <div className="neu-stat-cell">
+              <span className="stat-number">6 States</span>
+              <span className="stat-tag">Transport Corridors</span>
+            </div>
+            <div className="neu-stat-cell">
+              <span className="stat-number">100%</span>
+              <span className="stat-tag">Weighbridge Traceability</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ CTA BANNER ═══ */}
-      <section className="section cta-banner" id="cta-banner">
-        <div className="cta-banner__bg">
-          <ParticleField count={40} color="var(--neon-cyan)" speed={0.15} />
+      {/* 3 Dedicated Spaces Gateway Cards */}
+      <section className="section" id="sectors-gateway">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-label">Dedicated Enterprise Portals</span>
+            <h2 className="section-title">Select Your Agricultural Sector</h2>
+            <p className="section-subtitle">
+              Each vertical operates as a dedicated space with custom laboratory parameters, freight algorithms, and dispatch corridors.
+            </p>
+          </div>
+
+          <div className="corporate-sector-grid">
+            {/* Sector 1: Organic Manure Space */}
+            <div className="sector-gate-card neu-card">
+              <div className="sector-gate-header">
+                <div className="sector-gate-icon" style={{ background: '#ecfdf5', color: '#059669' }}>
+                  <Leaf size={24} />
+                </div>
+                <div>
+                  <span className="gate-subdomain">manure.biolinkagri.in</span>
+                  <h3 className="gate-title">Organic Manure Space</h3>
+                </div>
+              </div>
+              <p className="gate-desc">
+                Government-certified Fermented Organic Manure (FOM) and bio-slurry from SATAT CBG plants. FCO 1985 tested with strict moisture &lt; 30%.
+              </p>
+              <button
+                onClick={() => switchTenant('manure')}
+                className="neu-btn neu-btn-primary"
+                style={{ width: '100%', background: 'linear-gradient(135deg, #064e3b, #059669)' }}
+              >
+                Enter Manure Space <ArrowRight size={14} />
+              </button>
+            </div>
+
+            {/* Sector 2: Industrial Feed Space */}
+            <div className="sector-gate-card neu-card">
+              <div className="sector-gate-header">
+                <div className="sector-gate-icon" style={{ background: '#fffbeb', color: '#d97706' }}>
+                  <Wheat size={24} />
+                </div>
+                <div>
+                  <span className="gate-subdomain">feed.biolinkagri.in</span>
+                  <h3 className="gate-title">Industrial Feed Space</h3>
+                </div>
+              </div>
+              <p className="gate-desc">
+                Bulk Corn &amp; Rice DDGS (28-45% Crude Protein) and 80°+ Brix heavy cane molasses for commercial dairy, poultry, and aquafeed operations.
+              </p>
+              <button
+                onClick={() => switchTenant('feed')}
+                className="neu-btn neu-btn-primary"
+                style={{ width: '100%', background: 'linear-gradient(135deg, #78350f, #d97706)' }}
+              >
+                Enter Feed Space <ArrowRight size={14} />
+              </button>
+            </div>
+
+            {/* Sector 3: Sea Buckthorn Space */}
+            <div className="sector-gate-card neu-card">
+              <div className="sector-gate-header">
+                <div className="sector-gate-icon" style={{ background: '#fff7ed', color: '#ea580c' }}>
+                  <Mountain size={24} />
+                </div>
+                <div>
+                  <span className="gate-subdomain">seabuckthorn.biolinkagri.in</span>
+                  <h3 className="gate-title">Premium Botanicals Space</h3>
+                </div>
+              </div>
+              <p className="gate-desc">
+                Himalayan wild-harvested Sea Buckthorn extracts. Solvent-free Supercritical CO₂ seed oil, ruby pulp oil with &gt; 32% Omega-7, and soluble berry powder.
+              </p>
+              <button
+                onClick={() => switchTenant('seabuckthorn')}
+                className="neu-btn neu-btn-primary"
+                style={{ width: '100%', background: 'linear-gradient(135deg, #1e293b, #ea580c)' }}
+              >
+                Enter Botanicals Space <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="container cta-banner__content reveal-scale">
-          <h2 className="cta-banner__title">
-            Ready to Lock In Your <span className="text-glow">Consignment Allotment</span>?
-          </h2>
-          <p className="cta-banner__subtitle">
-            Get your verified institutional freight quote in under 60 seconds. Direct ex-factory pricing with 72-hour escrow protection.
-          </p>
-          <div className="cta-banner__actions">
-            <Link to="/institutional" className="btn btn-primary btn-lg">
-              Get Bulk Quote Now <ArrowRight size={16} />
-            </Link>
-            <Link to="/contact" className="btn btn-outline btn-lg">
-              Speak with Logistics Officer
-            </Link>
+      </section>
+
+      {/* Corporate Tonnage Calculator */}
+      <section className="section" id="tonnage-calculator">
+        <div className="container">
+          <TonnageSlider sector="corporate" defaultTonnage={30} />
+        </div>
+      </section>
+
+      {/* Corporate Governance & Trust Strip */}
+      <section className="section" id="corporate-trust">
+        <div className="container">
+          <div className="neu-lab-box neu-card">
+            <div className="lab-box-grid">
+              <div>
+                <span className="section-label">Institutional Assurance</span>
+                <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>The BioLink 72-Hour Gate Escrow Protocol</h3>
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '1.2rem' }}>
+                  To protect bulk institutional buyers, all financial transactions are held securely in quality escrow. Funds are disbursed to supplying CBG plants and distilleries only after the consignment passes destination weighbridge checks and client inspection.
+                </p>
+                <div className="lab-check-bullets">
+                  <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Dharma Kanta Certified Gross-Minus-Tare Verification</div>
+                  <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Zero Middleman Direct-from-Plant Pricing</div>
+                  <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Multi-Axle Intermodal Freight Network Across 6 States</div>
+                  <div className="check-item"><CheckCircle2 size={16} className="text-accent" /> Resend Verified Custom Domain Transactional Tracking</div>
+                </div>
+                <Link to="/logistics" className="neu-btn neu-btn-glass" style={{ marginTop: '1.5rem' }}>
+                  <MapPin size={16} /> Explore Pan-India Logistics Corridors
+                </Link>
+              </div>
+              <div className="lab-certificate-preview neu-inset">
+                <div className="cert-pill">
+                  <ShieldCheck size={32} className="text-accent" />
+                  <strong style={{ fontSize: '1.05rem', margin: '8px 0 4px' }}>Enterprise Asset-Light Logistics</strong>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    Operating under Small-Business MSME Tax-Exempt Framework.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

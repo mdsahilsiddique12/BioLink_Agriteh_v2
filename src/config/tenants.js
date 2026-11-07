@@ -1,85 +1,65 @@
 /**
  * BioLink Agritech Solutions — Multi-Tenant Sector Configuration
- * Defines branding, design tokens, product lines, and routing for:
- * 1. Corporate Gateway (biolinkagri.in) - Sapphire Corporate
- * 2. Organic Manure Sector (manure.biolinkagri.in) - Bio-Organic Earth
- * 3. Industrial Feed Sector (feed.biolinkagri.in) - Industrial Harvest
- * 4. Premium Botanicals (seabuckthorn.biolinkagri.in) - Himalayan Premium
+ * Defines strict sector isolation, Neumorphic Glass tokens, and sector-specific routing.
  */
 
 export const TENANTS = {
   corporate: {
     id: 'corporate',
     subdomain: '',
-    name: 'BioLink Agritech Solutions',
-    shortName: 'BioLink Hub',
-    tagline: 'Enterprise Agricultural Infrastructure & Clean Supply Chains',
+    name: 'BioLink Agritech Enterprise',
+    shortName: 'Corporate Hub',
+    tagline: 'Agricultural Infrastructure, Bio-Inputs & Industrial Feed Logistics',
     themeName: 'Sapphire Corporate',
     badge: 'Enterprise Gateway',
     colorPalette: {
-      primary: '#0f172a',        // Dark Slate / Midnight
-      primaryGlow: '#1e3a8a',    // Deep Royal Blue
-      accent: '#2563eb',         // Sapphire Trust Blue
-      accentHover: '#1d4ed8',
-      secondary: '#0284c7',      // Sky Cyan
-      bgVoid: '#f8fafc',         // Pristine Platinum
-      bgCard: 'rgba(255, 255, 255, 0.92)',
-      bgSurface: '#ffffff',
-      borderSubtle: '#e2e8f0',
-      borderGlow: 'rgba(37, 99, 235, 0.25)',
-      textPrimary: '#0f172a',
-      textSecondary: '#475569',
-      heroGradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%)',
-      btnPrimaryBg: 'linear-gradient(135deg, #1e40af, #2563eb)',
-      btnPrimaryGlow: '0 0 24px rgba(37, 99, 235, 0.4)',
+      primary: '#0b192c',        // Dark Corporate Midnight
+      accent: '#2563eb',         // Trust Sapphire Blue
+      accentGlow: 'rgba(37, 99, 235, 0.28)',
+      secondary: '#0284c7',
+      bgBase: '#edf2f7',         // Cool Platinum Neumorphic Base
+      insetBase: '#e2e8f0',
+      shadowTint: 'rgba(148, 163, 184, 0.35)',
     },
     hero: {
-      eyebrow: 'Verified SATAT Network & Industrial Co-Product Alliance',
+      eyebrow: 'Verified SATAT Network & Industrial Sourcing Alliance',
       titleLine1: 'India’s Precision B2B Network for',
-      titleHighlight: 'Sustainable Agritech & Industrial Feed',
-      subtitle: 'Unifying government-certified Fermented Organic Manure (FOM), high-protein DDGS & molasses feedstock, and high-altitude Himalayan botanicals under rigorous lab traceability.',
+      titleHighlight: 'Agri-Inputs, Industrial Feed & Extracts.',
+      subtitle: 'Bridging certified Compressed Biogas (CBG) organic manure plants, grain distillery DDGS mills, and high-altitude Himalayan botanical clusters with pan-India commercial buyers.',
       stat1: { value: '1,200+', label: 'Monthly MT Dispatched' },
-      stat2: { value: '72-Hr', label: 'Escrow QA Gate' },
-      stat3: { value: '6 States', label: 'Processing Corridors' },
-      stat4: { value: '100%', label: 'Weighbridge Traceability' },
+      stat2: { value: '72-Hour', label: 'Gate Escrow Clearance' },
+      stat3: { value: '6 States', label: 'Active Transport Corridors' },
+      stat4: { value: '100%', label: 'Dharma Kanta Verified' },
     },
-    defaultSector: 'all',
+    defaultSector: 'corporate',
   },
 
   manure: {
     id: 'manure',
     subdomain: 'manure',
     name: 'BioLink Organic Manure',
-    shortName: 'FOM Manure Portal',
-    tagline: 'Bulk Fermented Organic Manure (FOM) & Bio-Inputs',
+    shortName: 'Organic Manure Space',
+    tagline: 'Lab-Certified Fermented Organic Manure (FOM) & Liquid Bio-Slurry',
     themeName: 'Bio-Organic Earth',
-    badge: 'Govt. Verified SATAT Plant Partner',
+    badge: 'Govt. Verified SATAT / GOBARdhan Plant Network',
     colorPalette: {
-      primary: '#064e3b',        // Forest Green
-      primaryGlow: '#065f46',    // Deep Emerald
-      accent: '#059669',         // Emerald Green
-      accentHover: '#047857',
-      secondary: '#78350f',      // Warm Soil Brown
-      bgVoid: '#f8faf9',         // Soft Earth Cream
-      bgCard: 'rgba(255, 255, 255, 0.93)',
-      bgSurface: '#ffffff',
-      borderSubtle: '#e2e8f0',
-      borderGlow: 'rgba(5, 150, 105, 0.25)',
-      textPrimary: '#0f172a',
-      textSecondary: '#334155',
-      heroGradient: 'linear-gradient(135deg, #022c22 0%, #064e3b 50%, #059669 100%)',
-      btnPrimaryBg: 'linear-gradient(135deg, #10b981, #059669)',
-      btnPrimaryGlow: '0 0 24px rgba(16, 185, 129, 0.4)',
+      primary: '#064e3b',        // Deep Forest Green
+      accent: '#059669',         // Vibrant Emerald
+      accentGlow: 'rgba(5, 150, 105, 0.28)',
+      secondary: '#78350f',      // Soil Earth
+      bgBase: '#f1f6f2',         // Soft Earth Cream Neumorphic Base
+      insetBase: '#e4ece6',
+      shadowTint: 'rgba(140, 165, 148, 0.35)',
     },
     hero: {
-      eyebrow: 'FCO 1985 Standard Compliant & GOBARdhan Verified',
-      titleLine1: '100% Heat-Sterilized Bulk Supplies.',
-      titleHighlight: '72-Hour Gate Escrow Dispatch.',
-      subtitle: 'Direct factory gate allotments from certified Compressed Biogas (CBG) facilities. Guaranteed moisture < 30%, organic carbon > 16%, and strict zero heavy-metal certification.',
-      stat1: { value: '15-500', label: 'MT Capacity per Truck' },
-      stat2: { value: '< 30%', label: 'Strict Moisture Cap' },
-      stat3: { value: '> 16%', label: 'Organic Carbon Ratio' },
-      stat4: { value: 'Dharma Kanta', label: 'Weighbridge Certified' },
+      eyebrow: 'FCO 1985 Schedule IV Compliant & Heat-Sterilized',
+      titleLine1: 'Bulk Fermented Organic Manure.',
+      titleHighlight: '72-Hour Gate Escrow Dispatches.',
+      subtitle: 'Direct factory gate dispatches from certified Compressed Biogas (CBG) facilities across India. Guaranteed moisture < 30%, organic carbon > 16%, and strict zero heavy-metal certification.',
+      stat1: { value: '< 30.0%', label: 'Strict Moisture Cap' },
+      stat2: { value: '> 16.0%', label: 'Organic Carbon Ratio' },
+      stat3: { value: '15-500 MT', label: 'Multi-Axle Payload' },
+      stat4: { value: '100%', label: 'Weighbridge Traceability' },
     },
     defaultSector: 'manure',
   },
@@ -88,35 +68,27 @@ export const TENANTS = {
     id: 'feed',
     subdomain: 'feed',
     name: 'BioLink Industrial Feed',
-    shortName: 'DDGS & Molasses Portal',
-    tagline: 'Bulk Corn/Rice DDGS & Heavy Molasses for Dairy, Poultry & Aquafeed',
+    shortName: 'Industrial Feed Space',
+    tagline: 'High-Protein Corn/Rice DDGS & Heavy Blackstrap Cane Molasses',
     themeName: 'Industrial Harvest',
-    badge: 'Industrial Feedstock Allocation',
+    badge: 'Distillery-Direct Industrial Animal Nutrition',
     colorPalette: {
-      primary: '#78350f',        // Deep Amber / Molasses
-      primaryGlow: '#92400e',    // Rich Amber
+      primary: '#5c2d0c',        // Deep Molasses Mahogany
       accent: '#d97706',         // Sun-ripened Corn Gold
-      accentHover: '#b45309',
-      secondary: '#451a03',      // Matte Molasses Charcoal
-      bgVoid: '#fafaf9',         // Warm Platinum Harvest
-      bgCard: 'rgba(255, 255, 255, 0.92)',
-      bgSurface: '#ffffff',
-      borderSubtle: '#e7e5e4',
-      borderGlow: 'rgba(217, 119, 6, 0.28)',
-      textPrimary: '#1c1917',
-      textSecondary: '#44403c',
-      heroGradient: 'linear-gradient(135deg, #451a03 0%, #78350f 50%, #d97706 100%)',
-      btnPrimaryBg: 'linear-gradient(135deg, #f59e0b, #d97706)',
-      btnPrimaryGlow: '0 0 24px rgba(245, 158, 11, 0.4)',
+      accentGlow: 'rgba(217, 119, 6, 0.30)',
+      secondary: '#b45309',
+      bgBase: '#f7f4ee',         // Warm Harvest Cream Neumorphic Base
+      insetBase: '#ede8dd',
+      shadowTint: 'rgba(180, 160, 140, 0.35)',
     },
     hero: {
-      eyebrow: 'Distillery-Direct High Protein Animal Nutrition Contracts',
+      eyebrow: 'Direct Grain Distillery Co-Product Mill Allocations',
       titleLine1: 'Bulk Corn & Rice DDGS.',
-      titleHighlight: 'Heavy Molasses Rail & FTL Logistics.',
-      subtitle: 'Guaranteed 28%-45% crude protein feedstocks, high energy density, and superior digestibility for cattle feeds, poultry integrators, and aquaculture plants across India.',
-      stat1: { value: '28-45%', label: 'Crude Protein Content' },
-      stat2: { value: '> 80°', label: 'Brix Heavy Molasses' },
-      stat3: { value: '< 10%', label: 'Controlled Moisture' },
+      titleHighlight: 'Heavy Molasses Tanker Logistics.',
+      subtitle: 'High-protein grain byproducts (28%-45% crude protein) and 80°+ Brix heavy cane molasses for commercial dairy herds, poultry integrators, and aquaculture feed mills nationwide.',
+      stat1: { value: '28-45%', label: 'Crude Protein (Dry Basis)' },
+      stat2: { value: '> 80.0°', label: 'Brix Heavy Molasses' },
+      stat3: { value: '< 10.0%', label: 'Controlled Moisture' },
       stat4: { value: '24-48h', label: 'Direct Mill Clearance' },
     },
     defaultSector: 'feed',
@@ -127,34 +99,26 @@ export const TENANTS = {
     subdomain: 'seabuckthorn',
     name: 'BioLink Himalayan Botanicals',
     shortName: 'Sea Buckthorn Space',
-    tagline: 'High-Altitude Leh-Ladakh Sea Buckthorn Oils & Active Extracts',
+    tagline: 'High-Altitude Leh-Ladakh Supercritical CO₂ Oils & Active Extracts',
     themeName: 'Himalayan Premium',
-    badge: 'Himalayan Superfruit Bio-Active Extracts',
+    badge: 'Leh-Ladakh Wild-Harvest Superfruit Extraction',
     colorPalette: {
       primary: '#1e293b',        // Cold Slate
-      primaryGlow: '#334155',    // Mountain Slate
       accent: '#ea580c',         // Alpine Orange
-      accentHover: '#c2410c',
-      secondary: '#f97316',      // Golden Berry
-      bgVoid: '#fbfcfd',         // Pristine Snow White
-      bgCard: 'rgba(255, 255, 255, 0.94)',
-      bgSurface: '#ffffff',
-      borderSubtle: '#e2e8f0',
-      borderGlow: 'rgba(234, 88, 12, 0.28)',
-      textPrimary: '#0f172a',
-      textSecondary: '#475569',
-      heroGradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #ea580c 100%)',
-      btnPrimaryBg: 'linear-gradient(135deg, #f97316, #ea580c)',
-      btnPrimaryGlow: '0 0 24px rgba(234, 88, 12, 0.45)',
+      accentGlow: 'rgba(234, 88, 12, 0.30)',
+      secondary: '#f97316',
+      bgBase: '#f4f6fa',         // Crisp Alpine Snow Neumorphic Base
+      insetBase: '#e8edf5',
+      shadowTint: 'rgba(150, 165, 185, 0.35)',
     },
     hero: {
-      eyebrow: 'Leh-Ladakh & Lahaul-Spiti Wild-Harvest Cluster Sourcing',
-      titleLine1: 'CO₂ Supercritical Himalayan Extracts.',
-      titleHighlight: 'Rare Omega-7 For Clinical Cosmetics & Wellness.',
-      subtitle: 'Pure supercritical CO₂ seed oil, dark ruby pulp oil with > 30% Palmitoleic acid, and freeze-dried bioactive soluble berry powders for nutraceuticals and clean beauty.',
-      stat1: { value: '> 30%', label: 'Omega-7 Palmitoleic' },
+      eyebrow: 'Wild-Harvested from 11,000+ ft High-Altitude Himalayan Clusters',
+      titleLine1: 'Pure Supercritical CO₂ Sea Buckthorn.',
+      titleHighlight: 'Rare Omega-7 For Clinical Cosmetics & Nutrition.',
+      subtitle: 'Solvent-free supercritical CO₂ seed oil, deep ruby berry pulp oil (>32% Palmitoleic acid), and cryogenically freeze-dried soluble fruit powders for premium cosmetic and wellness brands.',
+      stat1: { value: '> 32.0%', label: 'Omega-7 (Palmitoleic)' },
       stat2: { value: '100%', label: 'Supercritical CO₂ Purity' },
-      stat3: { value: '11,000 ft', label: 'Wild Himalayan Origin' },
+      stat3: { value: '> 800mg', label: 'Natural Vitamin C / 100g' },
       stat4: { value: 'NABL Lab', label: 'Heavy Metal Screened' },
     },
     defaultSector: 'seabuckthorn',
@@ -162,10 +126,10 @@ export const TENANTS = {
 };
 
 /**
- * Determine tenant based on current hostname or fallback query param
+ * Detect tenant from hostname, query parameter, or path prefix
  */
 export function detectTenant(hostname = window.location.hostname, search = window.location.search) {
-  // 1. Check query parameter override for testing (e.g. ?sector=feed or ?tenant=manure)
+  // 1. Query parameter override (e.g. ?tenant=feed or ?tenant=seabuckthorn)
   if (search) {
     const params = new URLSearchParams(search);
     const tenantParam = params.get('tenant') || params.get('sector');
@@ -174,13 +138,7 @@ export function detectTenant(hostname = window.location.hostname, search = windo
     }
   }
 
-  // 2. Check path-based preview (e.g. /feed, /manure, /seabuckthorn)
-  const pathname = window.location.pathname.toLowerCase();
-  if (pathname.startsWith('/feed')) return TENANTS.feed;
-  if (pathname.startsWith('/manure')) return TENANTS.manure;
-  if (pathname.startsWith('/seabuckthorn') || pathname.startsWith('/wellness')) return TENANTS.seabuckthorn;
-
-  // 3. Subdomain extraction from hostname (e.g. feed.biolinkagri.in or manure.localhost)
+  // 2. Subdomain check from hostname
   const parts = hostname.split('.');
   if (parts.length >= 2) {
     const sub = parts[0].toLowerCase();
@@ -189,6 +147,12 @@ export function detectTenant(hostname = window.location.hostname, search = windo
     if (sub === 'seabuckthorn' || sub === 'wellness' || sub === 'botanicals') return TENANTS.seabuckthorn;
   }
 
-  // Default to Corporate Gateway
+  // 3. Path-based prefix check
+  const pathname = window.location.pathname.toLowerCase();
+  if (pathname.startsWith('/feed')) return TENANTS.feed;
+  if (pathname.startsWith('/manure')) return TENANTS.manure;
+  if (pathname.startsWith('/seabuckthorn') || pathname.startsWith('/wellness')) return TENANTS.seabuckthorn;
+
+  // Default to Corporate
   return TENANTS.corporate;
 }
