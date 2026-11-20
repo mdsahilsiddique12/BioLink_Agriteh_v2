@@ -128,20 +128,16 @@ export default function Navbar() {
 
             {/* Center: Clean Working Navigation (Centered & Balanced) */}
             <div className="navbar__nav-links">
-              <a href="#product-specifications" className="neu-nav-item">
-                Specifications
-              </a>
-              <a href="#tonnage-calculator" className="neu-nav-item">
-                Freight Calculator
-              </a>
-              <button
-                onClick={() => setShowCoaModal(true)}
-                className="neu-nav-item neu-nav-item--coming-soon"
-                title="Lab Reports Policy"
-              >
-                <span>Lab Reports</span>
-                <span className="nav-coming-soon-badge">Coming Soon</span>
-              </button>
+              <Link to="/buyer" className={`neu-nav-item ${location.pathname === '/buyer' ? 'active' : ''}`}>
+                Buyer RFQ
+              </Link>
+              <Link to="/supplier" className={`neu-nav-item ${location.pathname === '/supplier' ? 'active' : ''}`}>
+                Supplier Portal
+              </Link>
+              <Link to="/verify" className={`neu-nav-item ${location.pathname === '/verify' ? 'active' : ''}`}>
+                <span>Batch Verification</span>
+                <span className="nav-coming-soon-badge" style={{ background: '#059669', color: '#ffffff' }}>LIMS</span>
+              </Link>
               <Link to="/logistics" className={`neu-nav-item ${location.pathname === '/logistics' ? 'active' : ''}`}>
                 Logistics &amp; Escrow
               </Link>

@@ -7,8 +7,11 @@ export const registerSchema = z.object({
   name: z.string().trim().min(2).max(120),
   email: z.email().max(180),
   password: z.string().min(8).max(100),
-  role: z.enum(['buyer', 'plant_partner']),
+  role: z.enum(['buyer', 'supplier', 'plant_partner', 'partner', 'admin']),
   phone: z.string().trim().regex(indianPhoneRegex).optional().or(z.literal('')),
+  companyName: z.string().trim().max(180).optional(),
+  gstin: z.string().trim().max(20).optional(),
+  vertical: z.enum(['manure', 'feed', 'seabuckthorn', 'corporate']).optional(),
 });
 
 export const loginSchema = z.object({

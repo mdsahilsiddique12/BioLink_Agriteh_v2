@@ -10,6 +10,9 @@ import ParticleField from '../components/ParticleField';
 import FloatingObjects from '../components/FloatingObjects';
 import TonnageSlider from '../components/TonnageSlider';
 import ProductSpecCard from '../components/ProductSpecCard';
+import EnterpriseWorkflowStrip from '../components/EnterpriseWorkflowStrip';
+import IndiaCorridorMap from '../components/IndiaCorridorMap';
+import LandedCostOptimizer from '../components/LandedCostOptimizer';
 import { useSubdomain } from '../context/SubdomainContext';
 import { useScrollReveal, useCountUp } from '../hooks/useAnimations';
 import { supplyHubs } from '../data/testimonials';
@@ -479,40 +482,46 @@ export default function HomePage() {
           </div>
 
           <h1 className="neu-hero-title">
-            <span>Enterprise Agricultural Sourcing.</span>
-            <span className="text-gradient">Three Dedicated Industrial Sectors.</span>
+            <span>One Enterprise Platform.</span>
+            <span className="text-gradient">Three Industrial Sourcing Networks.</span>
           </h1>
 
           <p className="neu-hero-sub">
-            Operating as an asset-light technology platform matching government-verified Compressed Biogas (CBG) organic manure plants, grain distillery DDGS mills, and high-altitude Himalayan botanical clusters with commercial enterprises.
+            Connecting verified producers, institutional buyers, laboratories and logistics partners through an integrated B2B procurement and supply-chain coordination platform.
           </p>
 
           <div className="neu-hero-actions">
-            <Link to="/institutional" className="neu-btn neu-btn-primary neu-btn-lg">
-              Get Consolidated Quote <ArrowRight size={16} />
+            <a href="#sectors-gateway" className="neu-btn neu-btn-glass neu-btn-lg">
+              Explore Sourcing Networks
+            </a>
+            <Link to="/buyer" className="neu-btn neu-btn-primary neu-btn-lg">
+              Request Institutional Quotation (RFQ) <ArrowRight size={16} />
             </Link>
-            <Link to="/about" className="neu-btn neu-btn-glass neu-btn-lg">
-              Corporate Governance
+            <Link to="/supplier" className="neu-btn neu-btn-glass neu-btn-lg">
+              Become a Supply Partner
             </Link>
           </div>
 
-          {/* Corporate Stat Strip */}
-          <div className="neu-stat-strip neu-card">
+          {/* 5-Step Visual Pipeline Underneath Hero: Source → Quality → Agreement → Logistics → Delivery */}
+          <EnterpriseWorkflowStrip />
+
+          {/* Live Enterprise Stat Strip */}
+          <div className="neu-stat-strip neu-card" style={{ marginTop: '2.5rem' }}>
             <div className="neu-stat-cell">
-              <span className="stat-number">1,200+</span>
-              <span className="stat-tag">Monthly MT Dispatched</span>
+              <span className="stat-number">142+</span>
+              <span className="stat-tag">Verified CBG &amp; Distilleries</span>
             </div>
             <div className="neu-stat-cell">
-              <span className="stat-number">72-Hour</span>
-              <span className="stat-tag">Gate Escrow Clearance</span>
+              <span className="stat-number">48,500+</span>
+              <span className="stat-tag">MT Monthly Allocation Capacity</span>
             </div>
             <div className="neu-stat-cell">
-              <span className="stat-number">6 States</span>
-              <span className="stat-tag">Transport Corridors</span>
+              <span className="stat-number">18 Mins</span>
+              <span className="stat-tag">Avg. RFQ Landed Quote SLA</span>
             </div>
             <div className="neu-stat-cell">
-              <span className="stat-number">100%</span>
-              <span className="stat-tag">Weighbridge Traceability</span>
+              <span className="stat-number">99.8%</span>
+              <span className="stat-tag">72h Gate Escrow Success Rate</span>
             </div>
           </div>
         </div>
@@ -602,10 +611,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Corporate Tonnage Calculator */}
-      <section className="section" id="tonnage-calculator">
+      {/* Interactive India Supply-Chain Corridor Map */}
+      <section className="section" id="corridor-map-section">
         <div className="container">
-          <TonnageSlider sector="corporate" defaultTonnage={30} />
+          <IndiaCorridorMap />
+        </div>
+      </section>
+
+      {/* Real Landed-Cost Multi-Origin Optimizer */}
+      <section className="section" id="landed-cost-optimizer-section">
+        <div className="container">
+          <LandedCostOptimizer initialVertical="corporate" />
         </div>
       </section>
 

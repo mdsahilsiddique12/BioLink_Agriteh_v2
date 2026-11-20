@@ -150,5 +150,61 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+
+  // ── Enterprise Buyer RFQs & Quotations ──
+  createRfq(payload) {
+    return request('/rfq/create', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+  getRfq(rfqNumber) {
+    return request(`/rfq/${encodeURIComponent(rfqNumber)}`);
+  },
+  acceptRfqQuote(rfqNumber, payload) {
+    return request(`/rfq/${encodeURIComponent(rfqNumber)}/accept-quote`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+  signRfqAgreement(rfqNumber, payload) {
+    return request(`/rfq/${encodeURIComponent(rfqNumber)}/agreement`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  // ── Supplier & Producer Network ──
+  registerSupplier(payload) {
+    return request('/supplier/register', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+  getSupplierList() {
+    return request('/supplier/list');
+  },
+  uploadDispatchSlip(payload) {
+    return request('/supplier/dispatch/upload-slip', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  // ── Central Laboratory & Batch Passports ──
+  getBatchPassport(batchId) {
+    return request(`/batch/${encodeURIComponent(batchId)}`);
+  },
+  getAllBatches() {
+    return request('/batch/list/all');
+  },
+
+  // ── Logistics Landed-Cost Optimizer ──
+  optimizeLandedCost(payload) {
+    return request('/logistics/landed-cost-optimize', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
 };
 

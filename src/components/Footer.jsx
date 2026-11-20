@@ -106,12 +106,12 @@ export default function Footer() {
             </div>
             <span className="footer-subdomain-pill">Operations Node</span>
             <ul className="footer-links-list">
-              <li><Link to="/logistics" className="footer-link">Bihar Intrastate Gate Corridor</Link></li>
-              <li><Link to="/logistics" className="footer-link">West Bengal Tea Garden Route</Link></li>
-              <li><Link to="/logistics" className="footer-link">Uttar Pradesh Sugarcane &amp; Mill Belt</Link></li>
-              <li><Link to="/logistics" className="footer-link">Assam Brahmaputra Freight Corridor</Link></li>
+              <li><Link to="/buyer" className="footer-link"><strong>Buyer Portal (RFQ &amp; Quotes)</strong></Link></li>
+              <li><Link to="/supplier" className="footer-link"><strong>Supplier Portal (Producers &amp; Mills)</strong></Link></li>
+              <li><Link to="/verify" className="footer-link"><strong>Digital Batch Verification (LIMS)</strong></Link></li>
+              <li><Link to="/logistics" className="footer-link">Landed-Cost Optimization Engine</Link></li>
               <li><Link to="/partner" className="footer-link">Partner Portal (KrishakJan KJ01)</Link></li>
-              <li><Link to="/terms" className="footer-link">Terms &amp; Gate Escrow Rules</Link></li>
+              <li><Link to="/terms" className="footer-link">Terms &amp; 72h Gate Escrow Rules</Link></li>
               <li><Link to="/privacy" className="footer-link">Privacy &amp; Data Security</Link></li>
             </ul>
           </div>

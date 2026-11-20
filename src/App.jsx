@@ -16,6 +16,9 @@ import PrivacyPage from './pages/PrivacyPage';
 import LabReportsPage from './pages/LabReportsPage';
 import NurseryGuidePage from './pages/NurseryGuidePage';
 import SampleOrderPage from './pages/SampleOrderPage';
+import BuyerPortalPage from './pages/BuyerPortalPage';
+import SupplierPortalPage from './pages/SupplierPortalPage';
+import VerificationCentrePage from './pages/VerificationCentrePage';
 import { AuthProvider } from './context/AuthContext';
 import { PartnerAuthProvider } from './context/PartnerAuthContext';
 import { SubdomainProvider, useSubdomain } from './context/SubdomainContext';
@@ -74,6 +77,14 @@ function AppContent() {
         <Route path="/privacy" element={<PrivacyPage />} />
 
         {/* Portals */}
+        <Route path="/buyer" element={<BuyerPortalPage />} />
+        <Route path="/rfq" element={<BuyerPortalPage />} />
+        <Route path="/supplier" element={<SupplierPortalPage />} />
+        <Route path="/suppliers" element={<SupplierPortalPage />} />
+        <Route path="/producer" element={<SupplierPortalPage />} />
+        <Route path="/verify" element={<VerificationCentrePage />} />
+        <Route path="/batch-passport" element={<VerificationCentrePage />} />
+        <Route path="/lims" element={<VerificationCentrePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/partner" element={<PartnerLoginPage />} />
         <Route path="/partner/login" element={<PartnerLoginPage />} />

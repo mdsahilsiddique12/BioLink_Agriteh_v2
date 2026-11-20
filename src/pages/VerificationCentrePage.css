@@ -1,0 +1,382 @@
+.verify-page {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--navbar-height) + 3rem) 0 5rem 0;
+  overflow: hidden;
+}
+
+.verify-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.verify-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.verify-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
+  font-weight: 900;
+  color: var(--theme-primary);
+  margin: 0.8rem 0 0.6rem 0;
+  letter-spacing: -0.02em;
+}
+
+.verify-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 750px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Search Card */
+.batch-search-card {
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--neu-shadow-md);
+  margin-bottom: 2.5rem;
+}
+
+.search-form-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-input-wrap {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-light);
+}
+
+.search-batch-input {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-inset);
+  box-shadow: var(--neu-inset);
+  border: 1px solid var(--glass-border);
+  font-family: monospace;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+  outline: none;
+  letter-spacing: 0.05em;
+}
+
+.search-batch-input:focus {
+  border-color: var(--theme-accent);
+}
+
+.search-btn {
+  padding: 14px 24px;
+  white-space: nowrap;
+}
+
+.quick-batches-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid var(--glass-border-subtle);
+}
+
+.quick-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+.quick-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-inset);
+  border: 1px solid var(--glass-border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-pill:hover,
+.quick-pill.is-current {
+  color: var(--theme-accent);
+  border-color: var(--theme-accent);
+  background: #ffffff;
+}
+
+/* Alert Error */
+.verify-alert-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 2rem;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  font-weight: 700;
+}
+
+/* Certificate Card */
+.batch-passport-certificate {
+  padding: 36px;
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border: 2px solid var(--glass-border);
+  box-shadow: var(--neu-shadow-lg);
+  text-align: left;
+}
+
+.cert-top-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.cert-brand-id {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cert-logo-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--bg-inset);
+  box-shadow: var(--neu-inset);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cert-type-pill {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cert-batch-id {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--theme-primary);
+  margin: 2px 0 4px 0;
+  letter-spacing: 0.02em;
+}
+
+.cert-product-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--theme-accent);
+}
+
+.cert-qr-seal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  border-radius: var(--radius-lg);
+}
+
+.qr-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qr-valid-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.qr-caption small {
+  font-size: 0.7rem;
+  color: var(--text-light);
+}
+
+/* Meta Grid */
+.cert-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 28px;
+}
+
+.meta-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.meta-lbl {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+.meta-val {
+  font-size: 1.05rem;
+  color: var(--theme-primary);
+}
+
+.meta-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Parameters Section */
+.cert-parameters-section {
+  margin-bottom: 28px;
+}
+
+.params-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--theme-primary);
+  margin: 0 0 14px 0;
+}
+
+.params-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+.params-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.params-table th {
+  background: #f8fafc;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-light);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.params-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.tested-val-cell {
+  font-weight: 800;
+  color: var(--theme-primary);
+}
+
+.std-val-cell {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.status-pill.pass {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.status-pill.exceeds_spec {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* Bottom Bar */
+.cert-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.escrow-assurance-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.cert-btn-actions {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 800px) {
+  .cert-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .cert-top-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

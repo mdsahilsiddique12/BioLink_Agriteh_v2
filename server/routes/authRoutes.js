@@ -30,6 +30,10 @@ router.post(
         name: user.name,
         email: user.email,
         role: user.role,
+        phone: user.phone || '',
+        companyName: user.companyName || '',
+        gstin: user.gstin || '',
+        vertical: user.vertical || 'corporate',
       },
     });
   })
@@ -56,6 +60,10 @@ router.post(
         name: user.name,
         email: user.email,
         role: user.role,
+        phone: user.phone || '',
+        companyName: user.companyName || '',
+        gstin: user.gstin || '',
+        vertical: user.vertical || 'corporate',
       },
     });
   })

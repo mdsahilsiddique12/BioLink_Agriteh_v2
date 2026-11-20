@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import partnerRoutes from './routes/partnerRoutes.js';
 import publicRoutes from './routes/publicRoutes.js';
+import enterpriseRoutes from './routes/enterpriseRoutes.js';
 import { config } from './config.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
@@ -119,6 +120,7 @@ export function createApp() {
   app.get('/login', (req, res) => res.status(200).send("BioLink Agri Authentication System. Buyers vs. GOBARdhan Facility Managers login portals active."));
 
   app.use('/api', publicRoutes);
+  app.use('/api', enterpriseRoutes);
   app.use('/api/auth', authRoutes);
   app.use('/api/orders', orderRoutes);
   app.use('/api/partners', partnerRoutes);

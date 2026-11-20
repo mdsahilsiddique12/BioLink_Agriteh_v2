@@ -1,0 +1,150 @@
+.supplier-portal-page {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--navbar-height) + 3rem) 0 5rem 0;
+  overflow: hidden;
+}
+
+.supplier-portal-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.supplier-portal-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.compliance-shield-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.supplier-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Facilities Grid */
+.facilities-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.facility-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-inset);
+  box-shadow: var(--neu-inset);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fac-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fac-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--theme-primary);
+  margin: 0 0 4px 0;
+}
+
+.fac-loc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.verified-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+.fac-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+}
+
+.fac-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fac-metric span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+.fac-metric strong {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--theme-primary);
+}
+
+.fac-kyc-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kyc-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+.kyc-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.kyc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}

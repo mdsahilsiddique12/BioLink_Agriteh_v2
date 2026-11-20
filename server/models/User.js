@@ -6,8 +6,11 @@ const UserSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true, maxlength: 120 },
     email: { type: String, unique: true, required: true, lowercase: true, trim: true, maxlength: 180 },
     password: { type: String, required: true, minlength: 8 },
-    role: { type: String, enum: ['buyer', 'plant_partner'], required: true },
+    role: { type: String, enum: ['buyer', 'supplier', 'plant_partner', 'partner', 'admin'], required: true },
     phone: { type: String, trim: true, maxlength: 30 },
+    companyName: { type: String, trim: true, maxlength: 180 },
+    gstin: { type: String, trim: true, uppercase: true, maxlength: 20 },
+    vertical: { type: String, enum: ['manure', 'feed', 'seabuckthorn', 'corporate'], default: 'corporate' },
   },
   { timestamps: true }
 );
